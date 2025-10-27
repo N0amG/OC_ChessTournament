@@ -1,8 +1,8 @@
 {
-    "AB1235": {
+    "AB1234": {
+        "id": "AB1234",
         "lastname": "Doe",
         "firstname": "John",
-        "birthday": "1990-01-01",
-        "id": "AB1235"
+        "birthday": "1990-01-01"
     }
 }
