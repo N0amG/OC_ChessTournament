@@ -2,7 +2,7 @@ import json
 import os
 
 
-def load_json(path: str, default: any):
+def load_json(path: str, default: any) -> any:
     """
     Load a JSON file and return its content \n
     :param path: str - The path to the JSON file

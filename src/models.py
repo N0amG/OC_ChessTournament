@@ -20,21 +20,6 @@ class Player:
     firstname: str
     birthday: str
 
-    def register_player(self):
-        player = {
-            "id": self.id,
-            "lastname": self.lastname,
-            "firstname": self.firstname,
-            "birthday": self.birthday,
-        }
-
-        data = load_json("data/players.json", default={})
-
-        data[player["id"]] = player
-
-        save_json("data/players.json", data)
-
-
 # ---- Match Model ---- #
 
 
@@ -98,10 +83,3 @@ class Tournament:
     rounds_count: int = 4
     current_round: int = 1
     description: str = ""
-
-
-if __name__ == "__main__":
-    player = Player(
-        id="AB1234", lastname="Doe", firstname="John", birthday="1990-01-01"
-    )
-    player.register_player()
