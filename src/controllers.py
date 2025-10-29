@@ -3,6 +3,7 @@ from storage import load_json, save_json
 from views import PlayerView, TournamentView, main_menu
 import re
 from datetime import datetime
+from random import shuffle
 
 
 PLAYERS_PATH = "data/players.json"
@@ -76,8 +77,7 @@ class PlayerController:
             return False
 
         if not re.match(
-            r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$",
-            player_data["birthday"]
+            r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$", player_data["birthday"]
         ):
             print("Invalid birthday format.")
             return False
@@ -103,7 +103,6 @@ class TournamentController:
 
         # Remove existing tournament with same name if exists
         data = [t for t in data if t["name"] != tournament.name]
-
         data.append(TournamentController.tournament_to_dict(tournament))
 
         save_json(TOURNAMENTS_PATH, data)
@@ -133,13 +132,15 @@ class TournamentController:
     @staticmethod
     def tournament_to_dict(tournament: Tournament) -> dict:
         """Convert Tournament object to dictionary"""
+
         return {
             "name": tournament.name,
             "location": tournament.location,
             "start_date": tournament.start_date,
             "end_date": tournament.end_date,
             "players": [
-                PlayerController.player_to_dict(p) for p in tournament.players
+                {i: PlayerController.player_to_dict(p[0]), "score": p[1]}
+                for i, p in enumerate(tournament.players)
             ],
             "rounds": [
                 TournamentController.round_to_dict(r)
@@ -176,15 +177,30 @@ class TournamentController:
     @staticmethod
     def dict_to_tournament(data: dict) -> Tournament:
         """Convert dictionary to Tournament object"""
-        players = [
-            Player(
-                id=p["id"],
-                lastname=p["lastname"],
-                firstname=p["firstname"],
-                birthday=p["birthday"],
-            )
-            for p in data.get("players", [])
-        ]
+        # Handle both old and new format for player storage
+        players_data = data.get("players", [])
+        players = []
+
+        for p_data in players_data:
+            if isinstance(p_data, dict) and "player" in p_data:
+                # New format: {"player": {...}, "score": 0.0}
+                player = Player(
+                    id=p_data["player"]["id"],
+                    lastname=p_data["player"]["lastname"],
+                    firstname=p_data["player"]["firstname"],
+                    birthday=p_data["player"]["birthday"],
+                )
+                score = p_data.get("score", 0.0)
+                players.append([player, score])
+            else:
+                # Old format: just player dict
+                player = Player(
+                    id=p_data["id"],
+                    lastname=p_data["lastname"],
+                    firstname=p_data["firstname"],
+                    birthday=p_data["birthday"],
+                )
+                players.append([player, 0.0])
 
         rounds = [
             TournamentController.dict_to_round(r)
@@ -264,19 +280,27 @@ class TournamentController:
         # Validate date format
         date_regex = r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$"
         if not re.match(date_regex, tournament_data["start_date"]):
-            print("Invalid start_date format.")
-            return False
+            if (tournament_data["start_date"] != ""):
+                print("Invalid start_date format.")
+                return False
+            tournament_data["start_date"] = datetime.now().strftime("%Y-%m-%d")
+
         if not re.match(date_regex, tournament_data["end_date"]):
-            print("Invalid end_date format.")
-            return False
+            if (tournament_data["end_date"] != ""):
+                print("Invalid end_date format.")
+                return False
+            tournament_data["end_date"] = datetime.now().strftime("%Y-%m-%d")
 
         # Validate end_date is after start_date
         try:
             start = datetime.strptime(
                 tournament_data["start_date"], "%Y-%m-%d"
             )
-            end = datetime.strptime(tournament_data["end_date"], "%Y-%m-%d")
+            end = datetime.strptime(
+                tournament_data["end_date"], "%Y-%m-%d"
+            )
             if end < start:
+                print(end - start)
                 print("End date must be after start date.")
                 return False
         except ValueError:
@@ -346,6 +370,9 @@ class TournamentManager:
             if p["id"] in selected_ids
         ]
 
+        # Mélanger les joueurs
+        shuffle(players)
+
         # Créer le tournoi
         try:
             rounds_count = int(tournament_data["rounds_count"])
@@ -357,7 +384,7 @@ class TournamentManager:
             location=tournament_data["location"],
             start_date=tournament_data["start_date"],
             end_date=tournament_data["end_date"],
-            players=players,
+            players=[[player, 0.0] for player in players],
             rounds=[],
             rounds_count=rounds_count,
             current_round=1,
@@ -394,21 +421,23 @@ class MenuManager:
         while True:
             choice = main_menu()
             if choice == "1":
-                player_data = PlayerView.prompt_new_player()
-                player = Player(
-                    id=player_data["id"],
-                    lastname=player_data["lastname"],
-                    firstname=player_data["firstname"],
-                    birthday=player_data["birthday"],
-                )
-                if PlayerController.create_or_update_player(player):
-                    print("Player created/updated successfully.")
-                else:
-                    print("Failed to create/update player.")
+                user_input = PlayerView.player_menu()
+                if user_input == "1":
+                    player_data = PlayerView.prompt_new_player()
+                    player = Player(
+                        id=player_data["id"],
+                        lastname=player_data["lastname"],
+                        firstname=player_data["firstname"],
+                        birthday=player_data["birthday"],
+                    )
+                    if PlayerController.create_or_update_player(player):
+                        print("Player created/updated successfully.")
+                    else:
+                        print("Failed to create/update player.")
+                elif choice == "2":
+                    players = PlayerController.get_all_players()
+                    PlayerView.display_players(players)
             elif choice == "2":
-                players = PlayerController.get_all_players()
-                PlayerView.display_players(players)
-            elif choice == "3":
                 TournamentManager.run()
             elif choice == "0":
                 print("Exiting the program.")

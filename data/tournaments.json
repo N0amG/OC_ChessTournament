@@ -1,26 +1,50 @@
 [
     {
-        "name": "Examen Hunter",
-        "location": "Japon",
-        "start_date": "2025-10-28",
-        "end_date": "2026-02-28",
+        "name": "A1",
+        "location": "Lyon",
+        "start_date": "",
+        "end_date": "",
         "players": [
             {
-                "id": "AB12345",
-                "lastname": "Doe",
-                "firstname": "John",
-                "birthday": "1990-01-01"
+                "0": {
+                    "id": "AB12345",
+                    "lastname": "Doe",
+                    "firstname": "John",
+                    "birthday": "1990-01-01"
+                },
+                "score": 0.0
             },
             {
-                "id": "EZ12465",
-                "lastname": "Guez",
-                "firstname": "Noam",
-                "birthday": "2005-07-24"
+                "1": {
+                    "id": "GH78901",
+                    "lastname": "Bernard",
+                    "firstname": "Marie",
+                    "birthday": "1988-03-08"
+                },
+                "score": 0.0
+            },
+            {
+                "2": {
+                    "id": "EF23456",
+                    "lastname": "Dubois",
+                    "firstname": "Pierre",
+                    "birthday": "1992-11-20"
+                },
+                "score": 0.0
+            },
+            {
+                "3": {
+                    "id": "CD67890",
+                    "lastname": "Martin",
+                    "firstname": "Sophie",
+                    "birthday": "1985-05-15"
+                },
+                "score": 0.0
             }
         ],
         "rounds": [],
-        "rounds_count": 8,
+        "rounds_count": 4,
         "current_round": 1,
-        "description": "C'est un examen hunter"
+        "description": ""
     }
 ]

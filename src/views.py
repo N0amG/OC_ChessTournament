@@ -1,13 +1,20 @@
 def main_menu() -> str:
     print("\n=== OC Chess Tournaments ===")
-    print("1) Créer un joueur")
-    print("2) Lister les joueurs")
-    print("3) Gérer les tournois")
+    print("1) Gérer les joueurs")
+    print("2) Gérer les tournois")
     print("0) Quitter")
     return input("> ").strip()
 
 
 class PlayerView:
+
+    @staticmethod
+    def player_menu() -> str:
+        print("\n=== Gestion des joueurs ===")
+        print("1) Créer un joueur")
+        print("2) Lister les joueurs")
+        print("0) Retour au menu principal")
+        return input("> ").strip()
 
     @staticmethod
     def prompt_new_player() -> str:
@@ -81,7 +88,29 @@ class TournamentView:
             f"Tour actuel : {tournament['current_round']}/"
             f"{tournament['rounds_count']}"
         )
-        print(f"Nombre de joueurs : {len(tournament['players'])}")
+        
+        # Handle new format for players
+        players_data = tournament.get('players', [])
+        print(f"Nombre de joueurs : {len(players_data)}")
+        
+        if players_data:
+            print("\nJoueurs inscrits :")
+            for p_data in players_data:
+                if isinstance(p_data, dict) and "player" in p_data:
+                    # New format: {"player": {...}, "score": 0.0}
+                    player = p_data["player"]
+                    score = p_data.get("score", 0.0)
+                    print(
+                        f"  - {player['lastname']} {player['firstname']} "
+                        f"(Score: {score})"
+                    )
+                else:
+                    # Old format
+                    print(
+                        f"  - {p_data['lastname']} {p_data['firstname']} "
+                        f"(Score: 0.0)"
+                    )
+        
         print(f"Nombre de tours joués : {len(tournament['rounds'])}")
 
     @staticmethod

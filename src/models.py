@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from storage import load_json, save_json
 
 
 # ---- Player Model ---- #
@@ -78,7 +77,7 @@ class Tournament:
     location: str
     start_date: str  # format YYYY-MM-DD
     end_date: str  # format YYYY-MM-DD
-    players: list[Player]
+    players: list[list[Player, int]]  # List of [Player, score in tournament]
     rounds: list[Round]
     rounds_count: int = 4
     current_round: int = 1
