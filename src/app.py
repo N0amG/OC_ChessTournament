@@ -1,4 +1,4 @@
-from managers.menu import MenuManager
+from managers import MenuManager
 
 
 if __name__ == "__main__":
