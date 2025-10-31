@@ -1,15 +1,15 @@
-from controllers import PlayerController
-from controllers import TournamentController
-from controllers import MatchController
-from controllers import RoundController
-
-from views import TournamentView
-
-from models import Player, Tournament
-from models import Round
-
-from random import shuffle
 from datetime import datetime
+from random import shuffle
+
+from controllers.match import MatchController
+from controllers.round import RoundController
+from controllers.tournament import TournamentController
+from data_managers import (
+    PlayerManager,
+    TournamentManager as TournamentDataManager,
+)
+from models import Round, Tournament
+from views import TournamentView
 
 
 class TournamentManager:
@@ -40,7 +40,7 @@ class TournamentManager:
         tournament_data = TournamentView.prompt_new_tournament()
 
         # Charger tous les joueurs disponibles
-        all_players = PlayerController.get_all_players()
+        all_players = PlayerManager.find_all()
         if len(all_players) < 2:
             print(
                 "Erreur : Il faut au moins 2 joueurs enregistrés "
@@ -57,17 +57,8 @@ class TournamentManager:
             )
             return
 
-        # Créer les objets Player
-        players = [
-            Player(
-                id=p["id"],
-                lastname=p["lastname"],
-                firstname=p["firstname"],
-                birthday=p["birthday"],
-            )
-            for p in all_players
-            if p["id"] in selected_ids
-        ]
+        # Filtrer les joueurs sélectionnés
+        players = [p for p in all_players if p.id in selected_ids]
 
         # Mélanger les joueurs
         shuffle(players)
@@ -96,22 +87,26 @@ class TournamentManager:
             description=tournament_data["description"],
         )
 
-        if TournamentController.create_or_update_tournament(tournament):
-            print("Tournoi créé avec succès !")
+        # Valider puis sauvegarder
+        if TournamentController.validate_tournament(tournament):
+            if TournamentDataManager.save(tournament):
+                print("Tournoi créé avec succès !")
+            else:
+                print("Erreur lors de la sauvegarde du tournoi.")
         else:
-            print("Erreur lors de la création du tournoi.")
+            print("Erreur de validation du tournoi.")
 
     @staticmethod
     def list_tournaments():
         """Lister tous les tournois"""
-        tournaments = TournamentController.get_all_tournaments()
+        tournaments = TournamentDataManager.find_all()
         TournamentView.display_tournaments(tournaments)
 
     @staticmethod
     def show_tournament_details():
         """Afficher les détails d'un tournoi"""
         name = TournamentView.prompt_tournament_name()
-        tournament = TournamentController.get_tournament_by_name(name)
+        tournament = TournamentDataManager.find_by_name(name)
 
         if tournament:
             TournamentView.display_tournament_details(tournament)
@@ -122,25 +117,25 @@ class TournamentManager:
     def play_tournament():
         """Jouer un tournoi"""
         name = TournamentView.prompt_tournament_name()
-        tournament_data = TournamentController.get_tournament_by_name(name)
+        tournament = TournamentDataManager.find_by_name(name)
 
-        if not tournament_data:
+        if not tournament:
             print(f"Aucun tournoi trouvé avec le nom '{name}'.")
             return
-
-        # Convertir en objet Tournament
-        tournament = TournamentController.dict_to_tournament(tournament_data)
 
         # Vérifier si le tournoi est terminé
         if tournament.current_round > tournament.rounds_count:
             print("Ce tournoi est déjà terminé!")
-            TournamentView.display_rankings(tournament_data["players"])
+            TournamentView.display_rankings(tournament.players)
             return
 
         while tournament.current_round <= tournament.rounds_count:
             print(f"\n{'=' * 50}")
             print(f"TOURNOI: {tournament.name}")
-            print(f"Round {tournament.current_round}/{tournament.rounds_count}")
+            print(
+                f"Round {tournament.current_round}/"
+                f"{tournament.rounds_count}"
+            )
             print(f"{'=' * 50}")
 
             choice = TournamentView.play_tournament_menu()
@@ -148,20 +143,16 @@ class TournamentManager:
             if choice == "1":
                 TournamentManager.play_round(tournament)
                 # Sauvegarder après chaque round
-                TournamentController.create_or_update_tournament(tournament)
+                TournamentDataManager.save(tournament)
             elif choice == "2":
                 # Afficher le classement
-                TournamentView.display_rankings(
-                    TournamentController.tournament_to_dict(tournament)["players"]
-                )
+                TournamentView.display_rankings(tournament.players)
             elif choice == "3":
                 # Afficher les détails
-                TournamentView.display_tournament_details(
-                    TournamentController.tournament_to_dict(tournament)
-                )
+                TournamentView.display_tournament_details(tournament)
             elif choice == "0":
                 # Sauvegarder avant de quitter
-                TournamentController.create_or_update_tournament(tournament)
+                TournamentDataManager.save(tournament)
                 break
             else:
                 print("Choix invalide.")
@@ -170,9 +161,7 @@ class TournamentManager:
             print("\n" + "=" * 50)
             print("TOURNOI TERMINÉ!")
             print("=" * 50)
-            TournamentView.display_rankings(
-                TournamentController.tournament_to_dict(tournament)["players"]
-            )
+            TournamentView.display_rankings(tournament.players)
 
     @staticmethod
     def play_round(tournament: Tournament):
@@ -186,7 +175,9 @@ class TournamentManager:
             return
 
         # Créer le round avec les matchs
-        new_round, bye_player = RoundController.create_round(tournament, round_num)
+        new_round, bye_player = RoundController.create_round(
+            tournament, round_num
+        )
 
         print(f"\n{'='*50}")
         print(f"ROUND {round_num}")
@@ -202,8 +193,12 @@ class TournamentManager:
         # Saisir les résultats de chaque match
         updated_matches = []
         for i, match in enumerate(new_round.matches, 1):
-            player1_name = f"{match.player1.lastname} {match.player1.firstname}"
-            player2_name = f"{match.player2.lastname} {match.player2.firstname}"
+            player1_name = (
+                f"{match.player1.lastname} {match.player1.firstname}"
+            )
+            player2_name = (
+                f"{match.player2.lastname} {match.player2.firstname}"
+            )
 
             print(f"\nMatch {i}: {player1_name} vs {player2_name}")
 

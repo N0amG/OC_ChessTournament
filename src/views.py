@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from models import Player, Tournament
+
 
 def main_menu() -> str:
     print("\n=== OC Chess Tournaments ===")
@@ -30,7 +32,7 @@ class PlayerView:
         }
 
     @staticmethod
-    def display_players(players: list[dict]) -> None:
+    def display_players(players: list[Player]) -> None:
         print("\n-- Liste des joueurs --")
         if not players:
             print("Aucun joueur enregistré.")
@@ -38,8 +40,8 @@ class PlayerView:
 
         for player in players:
             print(
-                f"{player['id']} - {player['lastname']} "
-                f"{player['firstname']} - {player['birthday']}"
+                f"{player.id} - {player.lastname} "
+                f"{player.firstname} - {player.birthday}"
             )
 
 
@@ -71,7 +73,7 @@ class TournamentView:
         }
 
     @staticmethod
-    def display_tournaments(tournaments: list[dict]) -> None:
+    def display_tournaments(tournaments: list[Tournament]) -> None:
         print("\n-- Liste des tournois --")
         if not tournaments:
             print("Aucun tournoi enregistré.")
@@ -79,51 +81,47 @@ class TournamentView:
 
         for tournament in tournaments:
             print(
-                f"- {tournament['name']} | {tournament['location']} | "
-                f"{tournament['start_date']} au {tournament['end_date']}"
+                f"- {tournament.name} | {tournament.location} | "
+                f"{tournament.start_date} au {tournament.end_date}"
             )
 
     @staticmethod
-    def display_tournament_details(tournament: dict) -> None:
+    def display_tournament_details(tournament: Tournament) -> None:
         print("\n=== Détails du tournoi ===")
-        print(f"Nom : {tournament['name']}")
-        print(f"Lieu : {tournament['location']}")
-        print(f"Date : {tournament['start_date']} au {tournament['end_date']}")
-        print(f"Description : {tournament.get('description', 'N/A')}")
+        print(f"Nom : {tournament.name}")
+        print(f"Lieu : {tournament.location}")
+        print(f"Date : {tournament.start_date} au {tournament.end_date}")
+        print(f"Description : {tournament.description or 'N/A'}")
         print(
-            f"Tour actuel : {tournament['current_round']}/"
-            f"{tournament['rounds_count']}"
+            f"Tour actuel : {tournament.current_round}/"
+            f"{tournament.rounds_count}"
         )
 
         # Afficher les joueurs avec leur score
-        players_data = tournament.get("players", [])
-        print(f"Nombre de joueurs : {len(players_data)}")
+        print(f"Nombre de joueurs : {len(tournament.players)}")
 
-        if players_data:
+        if tournament.players:
             print("\nJoueurs inscrits :")
-            for p_data in players_data:
-                # Format: {"player": {...}, "score": 0.0}
-                player = p_data["player"]
-                score = p_data.get("score", 0.0)
+            for player, score in tournament.players:
                 print(
-                    f"  - {player['lastname']} {player['firstname']} "
+                    f"  - {player.lastname} {player.firstname} "
                     f"(Score: {score})"
                 )
 
-        print(f"Nombre de tours joués : {len(tournament['rounds'])}")
+        print(f"Nombre de tours joués : {len(tournament.rounds)}")
 
     @staticmethod
     def prompt_tournament_name() -> str:
         return input("\nNom du tournoi : ").strip()
 
     @staticmethod
-    def prompt_select_players(available_players: list[dict]) -> list[str]:
+    def prompt_select_players(available_players: list[Player]) -> list[str]:
         print("\n-- Sélection des joueurs --")
         print("Joueurs disponibles :")
         for i, player in enumerate(available_players, 1):
             print(
-                f"{i}) {player['id']} - {player['lastname']} "
-                f"{player['firstname']}"
+                f"{i}) {player.id} - {player.lastname} "
+                f"{player.firstname}"
             )
 
         print(
@@ -137,7 +135,7 @@ class TournamentView:
             try:
                 idx = int(num.strip()) - 1
                 if 0 <= idx < len(available_players):
-                    selected_ids.append(available_players[idx]["id"])
+                    selected_ids.append(available_players[idx].id)
             except ValueError:
                 continue
 
@@ -191,23 +189,24 @@ class TournamentView:
             return (0.5, 0.5)
 
     @staticmethod
-    def display_rankings(players_data: list[dict]) -> None:
-        """Afficher le classement des joueurs"""
+    def display_rankings(players_data: list[list]) -> None:
+        """Afficher le classement des joueurs
+        
+        Args:
+            players_data: Liste de [Player, score]
+        """
         print("\n" + "=" * 50)
         print("CLASSEMENT")
         print("=" * 50)
 
         # Trier par score décroissant
         sorted_players = sorted(
-            players_data, key=lambda x: x.get("score", 0.0), reverse=True
+            players_data, key=lambda x: x[1], reverse=True
         )
 
-        for i, p_data in enumerate(sorted_players, 1):
-            # Format: {"player": {...}, "score": 0.0}
-            player = p_data["player"]
-            score = p_data.get("score", 0.0)
+        for i, (player, score) in enumerate(sorted_players, 1):
             print(
-                f"{i}. {player['lastname']} {player['firstname']} "
+                f"{i}. {player.lastname} {player.firstname} "
                 f"- {score} points"
             )
 

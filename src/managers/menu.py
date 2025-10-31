@@ -1,4 +1,5 @@
-from controllers import PlayerController
+from controllers.player import PlayerController
+from data_managers import PlayerManager
 from managers.tournament import TournamentManager
 from models import Player
 from views import PlayerView, main_menu
@@ -21,12 +22,16 @@ class MenuManager:
                             firstname=player_data["firstname"],
                             birthday=player_data["birthday"],
                         )
-                        if PlayerController.create_or_update_player(player):
-                            print("Player created/updated successfully.")
+                        # Valider puis sauvegarder
+                        if PlayerController.validate_player(player):
+                            if PlayerManager.save(player):
+                                print("Player created/updated successfully.")
+                            else:
+                                print("Failed to save player.")
                         else:
-                            print("Failed to create/update player.")
+                            print("Player validation failed.")
                     elif user_input == "2":
-                        players = PlayerController.get_all_players()
+                        players = PlayerManager.find_all()
                         PlayerView.display_players(players)
                     elif user_input == "0":
                         break
