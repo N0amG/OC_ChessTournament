@@ -20,7 +20,7 @@ def load_json(path: str, default: any) -> any:
         return default
 
 
-def save_json(path: str, data: any):
+def save_json(path: str, data: any) -> None:
     """
     Save data to a JSON file \n
     :param path: str - The path to the JSON file

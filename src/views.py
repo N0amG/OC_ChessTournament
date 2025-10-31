@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 def main_menu() -> str:
     print("\n=== OC Chess Tournaments ===")
     print("1) Gérer les joueurs")
@@ -48,6 +51,7 @@ class TournamentView:
         print("1) Créer un tournoi")
         print("2) Lister les tournois")
         print("3) Afficher un tournoi")
+        print("4) Jouer un tournoi")
         print("0) Retour au menu principal")
         return input("> ").strip()
 
@@ -57,8 +61,10 @@ class TournamentView:
         return {
             "name": input("Nom du tournoi : ").strip(),
             "location": input("Lieu : ").strip(),
-            "start_date": input("Date de début (YYYY-MM-DD) : ").strip(),
-            "end_date": input("Date de fin (YYYY-MM-DD) : ").strip(),
+            "start_date": input("Date de début (YYYY-MM-DD) : ").strip()
+            or datetime.now().strftime("%Y-%m-%d"),
+            "end_date": input("Date de fin (YYYY-MM-DD) : ").strip()
+            or datetime.now().strftime("%Y-%m-%d"),
             "description": input("Description (optionnel) : ").strip(),
             "rounds_count": input("Nombre de tours (défaut 4) : ").strip()
             or "4",
@@ -88,29 +94,22 @@ class TournamentView:
             f"Tour actuel : {tournament['current_round']}/"
             f"{tournament['rounds_count']}"
         )
-        
-        # Handle new format for players
-        players_data = tournament.get('players', [])
+
+        # Afficher les joueurs avec leur score
+        players_data = tournament.get("players", [])
         print(f"Nombre de joueurs : {len(players_data)}")
-        
+
         if players_data:
             print("\nJoueurs inscrits :")
             for p_data in players_data:
-                if isinstance(p_data, dict) and "player" in p_data:
-                    # New format: {"player": {...}, "score": 0.0}
-                    player = p_data["player"]
-                    score = p_data.get("score", 0.0)
-                    print(
-                        f"  - {player['lastname']} {player['firstname']} "
-                        f"(Score: {score})"
-                    )
-                else:
-                    # Old format
-                    print(
-                        f"  - {p_data['lastname']} {p_data['firstname']} "
-                        f"(Score: 0.0)"
-                    )
-        
+                # Format: {"player": {...}, "score": 0.0}
+                player = p_data["player"]
+                score = p_data.get("score", 0.0)
+                print(
+                    f"  - {player['lastname']} {player['firstname']} "
+                    f"(Score: {score})"
+                )
+
         print(f"Nombre de tours joués : {len(tournament['rounds'])}")
 
     @staticmethod
@@ -143,3 +142,87 @@ class TournamentView:
                 continue
 
         return selected_ids
+
+    @staticmethod
+    def display_round_matches(round_obj: dict, round_num: int) -> None:
+        """Afficher les matchs d'un round"""
+        print(f"\n{'='*50}")
+        print(f"ROUND {round_num}")
+        print(f"{'='*50}")
+
+        matches = round_obj.get("matches", [])
+        if not matches:
+            print("Aucun match dans ce round.")
+            return
+
+        for i, match in enumerate(matches, 1):
+            player1 = match["player1"]
+            player2 = match["player2"]
+            score1 = match.get("score1", 0.0)
+            score2 = match.get("score2", 0.0)
+
+            print(f"\nMatch {i}:")
+            print(
+                f"  {player1['lastname']} {player1['firstname']} "
+                f"({score1}) vs "
+                f"{player2['lastname']} {player2['firstname']} ({score2})"
+            )
+
+    @staticmethod
+    def prompt_match_result(
+        match_num: int, player1_name: str, player2_name: str
+    ) -> tuple[float, float]:
+        """Demander le résultat d'un match"""
+        print(f"\n--- Résultat du Match {match_num} ---")
+        print(f"1) {player1_name} gagne (1.0 - 0.0)")
+        print(f"2) {player2_name} gagne (0.0 - 1.0)")
+        print("3) Match nul (0.5 - 0.5)")
+
+        choice = input("Résultat > ").strip()
+
+        if choice == "1":
+            return (1.0, 0.0)
+        elif choice == "2":
+            return (0.0, 1.0)
+        elif choice == "3":
+            return (0.5, 0.5)
+        else:
+            print("Choix invalide. Match nul par défaut.")
+            return (0.5, 0.5)
+
+    @staticmethod
+    def display_rankings(players_data: list[dict]) -> None:
+        """Afficher le classement des joueurs"""
+        print("\n" + "=" * 50)
+        print("CLASSEMENT")
+        print("=" * 50)
+
+        # Trier par score décroissant
+        sorted_players = sorted(
+            players_data, key=lambda x: x.get("score", 0.0), reverse=True
+        )
+
+        for i, p_data in enumerate(sorted_players, 1):
+            # Format: {"player": {...}, "score": 0.0}
+            player = p_data["player"]
+            score = p_data.get("score", 0.0)
+            print(
+                f"{i}. {player['lastname']} {player['firstname']} "
+                f"- {score} points"
+            )
+
+    @staticmethod
+    def play_tournament_menu() -> str:
+        """Menu pour jouer un tournoi"""
+        print("\n--- Options ---")
+        print("1) Jouer le prochain round")
+        print("2) Voir le classement")
+        print("3) Voir les détails du tournoi")
+        print("0) Retour")
+        return input("> ").strip()
+
+    @staticmethod
+    def confirm_action(message: str) -> bool:
+        """Demander confirmation pour une action"""
+        response = input(f"{message} (o/n) : ").strip().lower()
+        return response in ["o", "oui", "y", "yes"]

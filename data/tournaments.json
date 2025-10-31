@@ -2,20 +2,20 @@
     {
         "name": "A1",
         "location": "Lyon",
-        "start_date": "",
-        "end_date": "",
+        "start_date": "2025-10-31",
+        "end_date": "2025-10-31",
         "players": [
             {
-                "0": {
-                    "id": "AB12345",
-                    "lastname": "Doe",
-                    "firstname": "John",
-                    "birthday": "1990-01-01"
+                "player": {
+                    "id": "CD67890",
+                    "lastname": "Martin",
+                    "firstname": "Sophie",
+                    "birthday": "1985-05-15"
                 },
                 "score": 0.0
             },
             {
-                "1": {
+                "player": {
                     "id": "GH78901",
                     "lastname": "Bernard",
                     "firstname": "Marie",
@@ -24,7 +24,7 @@
                 "score": 0.0
             },
             {
-                "2": {
+                "player": {
                     "id": "EF23456",
                     "lastname": "Dubois",
                     "firstname": "Pierre",
@@ -33,11 +33,77 @@
                 "score": 0.0
             },
             {
-                "3": {
-                    "id": "CD67890",
-                    "lastname": "Martin",
-                    "firstname": "Sophie",
-                    "birthday": "1985-05-15"
+                "player": {
+                    "id": "AB12345",
+                    "lastname": "Doe",
+                    "firstname": "John",
+                    "birthday": "1990-01-01"
+                },
+                "score": 0.0
+            }
+        ],
+        "rounds": [],
+        "rounds_count": 3,
+        "current_round": 1,
+        "description": "Un tournois d'échecs a lyon"
+    },
+    {
+        "name": "A2",
+        "location": "Paris",
+        "start_date": "2025-11-01",
+        "end_date": "2025-11-02",
+        "players": [
+            {
+                "player": {
+                    "id": "IJ34567",
+                    "lastname": "Petit",
+                    "firstname": "Luc",
+                    "birthday": "1995-07-12"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "KL89012",
+                    "lastname": "Robert",
+                    "firstname": "Emma",
+                    "birthday": "1991-09-25"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "MN45678",
+                    "lastname": "Richard",
+                    "firstname": "Thomas",
+                    "birthday": "1987-02-14"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "OP90123",
+                    "lastname": "Durand",
+                    "firstname": "Camille",
+                    "birthday": "1993-12-03"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "QR56789",
+                    "lastname": "Moreau",
+                    "firstname": "Lucas",
+                    "birthday": "1989-06-18"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "ST01234",
+                    "lastname": "Simon",
+                    "firstname": "Julie",
+                    "birthday": "1994-04-22"
                 },
                 "score": 0.0
             }
@@ -45,6 +111,63 @@
         "rounds": [],
         "rounds_count": 4,
         "current_round": 1,
-        "description": ""
+        "description": "Tournoi national à Paris"
+    },
+    {
+        "name": "A3",
+        "location": "Marseille",
+        "start_date": "2025-11-05",
+        "end_date": "2025-11-07",
+        "players": [
+            {
+                "player": {
+                    "id": "UV67890",
+                    "lastname": "Laurent",
+                    "firstname": "Nicolas",
+                    "birthday": "1986-08-30"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "WX23456",
+                    "lastname": "Lefevre",
+                    "firstname": "Chloe",
+                    "birthday": "1996-01-17"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "YZ78901",
+                    "lastname": "Roux",
+                    "firstname": "Antoine",
+                    "birthday": "1990-10-05"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "EZ12465",
+                    "lastname": "Guez",
+                    "firstname": "Noam",
+                    "birthday": "2005-07-24"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "AB12345",
+                    "lastname": "Doe",
+                    "firstname": "John",
+                    "birthday": "1990-01-01"
+                },
+                "score": 0.0
+            }
+        ],
+        "rounds": [],
+        "rounds_count": 4,
+        "current_round": 1,
+        "description": "Tournoi régional de Marseille"
     }
 ]
