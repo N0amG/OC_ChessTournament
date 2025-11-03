@@ -184,7 +184,6 @@ OC_ChessTournament/
 Quand le nombre de joueurs est impair :
 - Un joueur reçoit automatiquement un "bye" (victoire par forfait)
 - Le joueur avec le score le plus bas reçoit le bye en priorité
-- Un joueur ne peut recevoir qu'un seul bye par tournoi
 - Le bye rapporte 1.0 point
 
 ## 🚀 Installation et utilisation
@@ -193,22 +192,65 @@ Quand le nombre de joueurs est impair :
 
 - Python 3.10 ou supérieur
 
+git clone https://github.com/N0amG/OC_ChessTournament.git
 ### Installation
 
-```bash
+```powershell
 # Cloner le dépôt
 git clone https://github.com/N0amG/OC_ChessTournament.git
 cd OC_ChessTournament
 
-# Aucune dépendance externe requise (utilise uniquement la bibliothèque standard)
+# Créer l'environnement virtuel (Windows)
+python -m venv .venv
+
+# Activer l'environnement virtuel
+.\.venv\Scripts\Activate.ps1
+
+# Installer les dépendances
+pip install -r requirements.txt
 ```
+
+**Dépendances** :
+- `rich>=14.0.0` - Interface console moderne et élégante
+- `flake8==7.3.0` - Analyseur statique PEP 8
+- `flake8-html==0.4.3` - Export HTML du rapport Flake8
 
 ### Lancement
 
-```bash
-cd src
-python app.py
+```powershell
+python src/app.py
 ```
+
+> Pour quitter l'application, utilisez l'option `0` dans le menu principal.
+
+### Qualité de code
+
+Analyse Flake8 classique :
+
+```powershell
+python -m flake8 src
+```
+
+Génération du rapport HTML Flake8 :
+
+```powershell
+python -m flake8 src --format=html --htmldir=flake8-report
+
+# (optionnel) Ouvrir le rapport dans le navigateur par défaut
+start .\flake8-report\flake8.html
+```
+
+Pensez à régénérer le rapport après chaque modification significative.
+
+### Désactivation de l'environnement virtuel
+
+```powershell
+deactivate
+```
+
+### 🎨 Interface utilisateur
+
+L'application utilise la bibliothèque [Rich](https://github.com/Textualize/rich) pour offrir une interface console moderne et agréable avec des tableaux, des couleurs et des menus encadrés.
 
 ## 📝 Format des données
 
@@ -332,23 +374,6 @@ class Tournament:
   }
 ]
 ```
-
-## 🎓 Principes de conception
-
-### Clean Architecture
-
-1. **Dépendances unidirectionnelles** : Les couches extérieures dépendent des couches intérieures
-2. **Indépendance de la base de données** : Le changement de JSON vers SQL nécessiterait uniquement de modifier `data_managers/`
-3. **Testabilité** : Chaque couche peut être testée indépendamment
-4. **Réutilisabilité** : Les controllers peuvent être réutilisés avec différentes sources de données
-
-### SOLID
-
-- **S** (Single Responsibility) : Chaque classe a une seule responsabilité
-- **O** (Open/Closed) : Ouvert à l'extension, fermé à la modification
-- **L** (Liskov Substitution) : Les dataclasses respectent leur contrat
-- **I** (Interface Segregation) : Interfaces minimales et ciblées
-- **D** (Dependency Inversion) : Les couches hautes ne dépendent pas des détails d'implémentation
 
 ## 🤝 Contribution
 

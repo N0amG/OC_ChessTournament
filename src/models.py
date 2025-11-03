@@ -19,6 +19,7 @@ class Player:
     firstname: str
     birthday: str
 
+
 # ---- Match Model ---- #
 
 

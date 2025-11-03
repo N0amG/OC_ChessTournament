@@ -47,7 +47,7 @@ class PlayerController:
         if not name or len(name.strip()) == 0:
             print("Invalid name format: name cannot be empty.")
             return False
-        
+
         name_pattern = r"^[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÖØ-öø-ÿ\- ]*$"
         if not re.match(name_pattern, name):
             print(

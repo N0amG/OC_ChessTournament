@@ -1,15 +1,15 @@
 import json
 import os
+from typing import Any
 
 
-def load_json(path: str, default: any) -> any:
+def load_json(path: str, default: Any) -> Any:
     """
     Load a JSON file and return its content \n
     :param path: str - The path to the JSON file
-    :param default: any - The default value to return if the file does not
-    exist
-    or is empty
-    :return: any - The content of the JSON file or the default value
+        :param default: Any - The default value to return if the file does not
+            exist or is empty
+    :return: Any - The content of the JSON file or the default value
     """
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -20,11 +20,11 @@ def load_json(path: str, default: any) -> any:
         return default
 
 
-def save_json(path: str, data: any) -> None:
+def save_json(path: str, data: Any) -> None:
     """
     Save data to a JSON file \n
     :param path: str - The path to the JSON file
-    :param data: any - The data to save
+        :param data: Any - The data to save
     """
 
     os.makedirs(os.path.dirname(path), exist_ok=True)

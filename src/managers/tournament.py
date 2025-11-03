@@ -1,6 +1,8 @@
 from datetime import datetime
 from random import shuffle
 
+from rich.console import Console
+
 from controllers.match import MatchController
 from controllers.round import RoundController
 from controllers.tournament import TournamentController
@@ -10,6 +12,8 @@ from data_managers import (
 )
 from models import Round, Tournament
 from views import TournamentView
+
+console = Console()
 
 
 class TournamentManager:
@@ -32,7 +36,9 @@ class TournamentManager:
             elif choice == "0":
                 break
             else:
-                print("Choix invalide. Veuillez réessayer.")
+                console.print(
+                    "[yellow]⚠ Choix invalide. " "Veuillez réessayer.[/yellow]"
+                )
 
     @staticmethod
     def create_tournament():
@@ -42,18 +48,18 @@ class TournamentManager:
         # Charger tous les joueurs disponibles
         all_players = PlayerManager.find_all()
         if len(all_players) < 2:
-            print(
-                "Erreur : Il faut au moins 2 joueurs enregistrés "
-                "pour créer un tournoi."
+            console.print(
+                "[red]✗ Erreur : Il faut au moins 2 joueurs enregistrés "
+                "pour créer un tournoi.[/red]"
             )
             return
 
         # Sélectionner les joueurs
         selected_ids = TournamentView.prompt_select_players(all_players)
         if len(selected_ids) < 2:
-            print(
-                "Erreur : Vous devez sélectionner au moins 2 joueurs "
-                "pour le tournoi."
+            console.print(
+                "[red]✗ Erreur : Vous devez sélectionner au moins 2 "
+                "joueurs pour le tournoi.[/red]"
             )
             return
 
@@ -90,11 +96,13 @@ class TournamentManager:
         # Valider puis sauvegarder
         if TournamentController.validate_tournament(tournament):
             if TournamentDataManager.save(tournament):
-                print("Tournoi créé avec succès !")
+                console.print("[green]✓ Tournoi créé avec succès ![/green]")
             else:
-                print("Erreur lors de la sauvegarde du tournoi.")
+                console.print(
+                    "[red]✗ Erreur lors de la sauvegarde " "du tournoi.[/red]"
+                )
         else:
-            print("Erreur de validation du tournoi.")
+            console.print("[red]✗ Erreur de validation du tournoi.[/red]")
 
     @staticmethod
     def list_tournaments():
@@ -111,7 +119,10 @@ class TournamentManager:
         if tournament:
             TournamentView.display_tournament_details(tournament)
         else:
-            print(f"Aucun tournoi trouvé avec le nom '{name}'.")
+            console.print(
+                f"[yellow]⚠ Aucun tournoi trouvé avec le nom "
+                f"'{name}'.[/yellow]"
+            )
 
     @staticmethod
     def play_tournament():
@@ -120,23 +131,33 @@ class TournamentManager:
         tournament = TournamentDataManager.find_by_name(name)
 
         if not tournament:
-            print(f"Aucun tournoi trouvé avec le nom '{name}'.")
+            console.print(
+                f"[yellow]⚠ Aucun tournoi trouvé avec le nom "
+                f"'{name}'.[/yellow]"
+            )
             return
 
         # Vérifier si le tournoi est terminé
         if tournament.current_round > tournament.rounds_count:
-            print("Ce tournoi est déjà terminé!")
+            console.print(
+                (
+                    "\n[bold yellow]🏁 Ce tournoi est déjà terminé !"
+                    "[/bold yellow]\n"
+                )
+            )
             TournamentView.display_rankings(tournament.players)
             return
 
         while tournament.current_round <= tournament.rounds_count:
-            print(f"\n{'=' * 50}")
-            print(f"TOURNOI: {tournament.name}")
-            print(
-                f"Round {tournament.current_round}/"
-                f"{tournament.rounds_count}"
+            console.print(f"\n[bold cyan]{'=' * 50}[/bold cyan]")
+            console.print(
+                f"[bold green]🏆 TOURNOI: {tournament.name}[/bold green]"
             )
-            print(f"{'=' * 50}")
+            console.print(
+                f"[bold yellow]Round {tournament.current_round}/"
+                f"{tournament.rounds_count}[/bold yellow]"
+            )
+            console.print(f"[bold cyan]{'=' * 50}[/bold cyan]")
 
             choice = TournamentView.play_tournament_menu()
 
@@ -155,12 +176,12 @@ class TournamentManager:
                 TournamentDataManager.save(tournament)
                 break
             else:
-                print("Choix invalide.")
+                console.print("[yellow]⚠ Choix invalide.[/yellow]")
 
         if tournament.current_round > tournament.rounds_count:
-            print("\n" + "=" * 50)
-            print("TOURNOI TERMINÉ!")
-            print("=" * 50)
+            console.print(f"\n[bold green]{'=' * 50}[/bold green]")
+            console.print("[bold yellow]🏁 TOURNOI TERMINÉ ![/bold yellow]")
+            console.print(f"[bold green]{'=' * 50}[/bold green]")
             TournamentView.display_rankings(tournament.players)
 
     @staticmethod
@@ -171,7 +192,9 @@ class TournamentManager:
 
         # Vérifier si le round existe déjà
         if len(tournament.rounds) >= round_num:
-            print(f"Le round {round_num} a déjà été joué.")
+            console.print(
+                f"[yellow]⚠ Le round {round_num} a déjà été joué.[/yellow]"
+            )
             return
 
         # Créer le round avec les matchs
@@ -179,15 +202,16 @@ class TournamentManager:
             tournament, round_num
         )
 
-        print(f"\n{'='*50}")
-        print(f"ROUND {round_num}")
-        print(f"{'='*50}")
+        console.print(f"\n[bold cyan]{'='*50}[/bold cyan]")
+        console.print(f"[bold yellow]🎯 ROUND {round_num}[/bold yellow]")
+        console.print(f"[bold cyan]{'='*50}[/bold cyan]")
 
         # Afficher si un joueur a un "bye"
         if bye_player:
-            print(
-                f"\n {bye_player.lastname} {bye_player.firstname} "
-                f"a un BYE ce round (victoire par forfait : +1 point)"
+            console.print(
+                f"\n[yellow]⚡ {bye_player.lastname} "
+                f"{bye_player.firstname} a un BYE ce round "
+                f"(victoire par forfait : +1 point)[/yellow]\n"
             )
 
         # Saisir les résultats de chaque match
@@ -199,8 +223,6 @@ class TournamentManager:
             player2_name = (
                 f"{match.player2.lastname} {match.player2.firstname}"
             )
-
-            print(f"\nMatch {i}: {player1_name} vs {player2_name}")
 
             score1, score2 = TournamentView.prompt_match_result(
                 i, player1_name, player2_name
@@ -226,8 +248,7 @@ class TournamentManager:
 
         # Mettre à jour les scores du tournoi
         RoundController.update_tournament_scores(
-            tournament,
-            round_with_matches
+            tournament, round_with_matches
         )
 
         # Ajouter 1 point au joueur en "bye" s'il y en a un
@@ -235,13 +256,16 @@ class TournamentManager:
             for i, (player, score) in enumerate(tournament.players):
                 if player.id == bye_player.id:
                     tournament.players[i][1] += 1.0
-                    print(
-                        f"✅ {bye_player.lastname} {bye_player.firstname} "
-                        f"reçoit 1 point (bye)"
+                    console.print(
+                        f"[green]✓ {bye_player.lastname} "
+                        f"{bye_player.firstname} "
+                        f"reçoit 1 point (bye)[/green]"
                     )
                     break
 
         # Passer au round suivant
         tournament.current_round += 1
 
-        print(f"\nRound {round_num} terminé!")
+        console.print(
+            f"\n[bold green]✓ Round {round_num} terminé ![/bold green]\n"
+        )

@@ -33,7 +33,7 @@ class MatchController:
 
     @staticmethod
     def pair_players_first_round(
-        players: list[Player]
+        players: list[Player],
     ) -> tuple[list[Match], Player | None]:
         """
         Apparier les joueurs pour le premier round (aléatoire) \n
@@ -58,7 +58,7 @@ class MatchController:
 
     @staticmethod
     def pair_players_by_score(
-        tournament: Tournament
+        tournament: Tournament,
     ) -> tuple[list[Match], Player | None]:
         """
         Apparier les joueurs par score (système suisse) \n

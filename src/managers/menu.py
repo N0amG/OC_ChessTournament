@@ -1,8 +1,12 @@
+from rich.console import Console
+
 from controllers.player import PlayerController
 from data_managers import PlayerManager
 from managers.tournament import TournamentManager
 from models import Player
 from views import PlayerView, main_menu
+
+console = Console()
 
 
 class MenuManager:
@@ -25,11 +29,19 @@ class MenuManager:
                         # Valider puis sauvegarder
                         if PlayerController.validate_player(player):
                             if PlayerManager.save(player):
-                                print("Player created/updated successfully.")
+                                console.print(
+                                    "[green]✓ Joueur créé/mis à jour "
+                                    "avec succès ![/green]"
+                                )
                             else:
-                                print("Failed to save player.")
+                                console.print(
+                                    "[red]✗ Échec de la sauvegarde "
+                                    "du joueur.[/red]"
+                                )
                         else:
-                            print("Player validation failed.")
+                            console.print(
+                                "[red]✗ Validation du joueur " "échouée.[/red]"
+                            )
                     elif user_input == "2":
                         players = PlayerManager.find_all()
                         PlayerView.display_players(players)
@@ -38,7 +50,12 @@ class MenuManager:
             elif choice == "2":
                 TournamentManager.run()
             elif choice == "0":
-                print("Exiting the program.")
+                console.print(
+                    "\n[bold cyan]👋 Au revoir ! Merci d'avoir utilisé "
+                    "OC Chess Tournaments.[/bold cyan]\n"
+                )
                 break
             else:
-                print("Invalid choice. Please try again.")
+                console.print(
+                    "[yellow]⚠ Choix invalide. " "Veuillez réessayer.[/yellow]"
+                )
