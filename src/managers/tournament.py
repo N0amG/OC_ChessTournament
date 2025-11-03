@@ -211,18 +211,24 @@ class TournamentManager:
             updated_matches.append(match)
 
         # Créer le round avec les matchs mis à jour
-        completed_round = Round(
+        round_with_matches = Round(
             name=new_round.name,
             matches=updated_matches,
             started_at=new_round.started_at,
-            ended_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            ended_at=None,
         )
 
+        # Terminer le round en enregistrant l'heure de fin
+        RoundController.end_round(round_with_matches)
+
         # Ajouter le round au tournoi
-        tournament.rounds.append(completed_round)
+        tournament.rounds.append(round_with_matches)
 
         # Mettre à jour les scores du tournoi
-        RoundController.update_tournament_scores(tournament, completed_round)
+        RoundController.update_tournament_scores(
+            tournament,
+            round_with_matches
+        )
 
         # Ajouter 1 point au joueur en "bye" s'il y en a un
         if bye_player:

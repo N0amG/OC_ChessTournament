@@ -50,12 +50,8 @@ class RoundController:
         :param round_obj: Round - Le round à terminer
         :return: Round - Le round avec l'heure de fin
         """
-        return Round(
-            name=round_obj.name,
-            matches=round_obj.matches,
-            started_at=round_obj.started_at,
-            ended_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        )
+        round_obj.ended_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return round_obj
 
     @staticmethod
     def update_tournament_scores(tournament: Tournament, round_obj: Round):

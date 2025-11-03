@@ -7,7 +7,7 @@ from data_managers.storage import load_json, save_json
 from models import Tournament, Round, Match, Player
 
 
-TOURNAMENTS_PATH = "../data/tournaments.json"
+TOURNAMENTS_PATH = "data/tournaments.json"
 
 
 class TournamentManager:

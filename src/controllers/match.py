@@ -95,6 +95,7 @@ class MatchController:
                 if pair not in played_pairs:
                     best_opponent = j
                     break
+
                 # Priorité 2 : si tous ont été rencontrés,
                 # prendre le premier disponible
                 elif best_opponent is None:

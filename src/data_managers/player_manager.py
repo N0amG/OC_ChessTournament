@@ -7,7 +7,7 @@ from data_managers.storage import load_json, save_json
 from models import Player
 
 
-PLAYERS_PATH = "../data/players.json"
+PLAYERS_PATH = "data/players.json"
 
 
 class PlayerManager:
