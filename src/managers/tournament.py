@@ -27,14 +27,19 @@ class TournamentManager:
 
             if choice == "1":
                 TournamentManager.create_tournament()
+
             elif choice == "2":
                 TournamentManager.list_tournaments()
+
             elif choice == "3":
                 TournamentManager.show_tournament_details()
+
             elif choice == "4":
                 TournamentManager.play_tournament()
+
             elif choice == "0":
                 break
+
             else:
                 console.print(
                     "[yellow]⚠ Choix invalide. " "Veuillez réessayer.[/yellow]"
@@ -47,6 +52,7 @@ class TournamentManager:
 
         # Charger tous les joueurs disponibles
         all_players = PlayerManager.find_all()
+
         if len(all_players) < 2:
             console.print(
                 "[red]✗ Erreur : Il faut au moins 2 joueurs enregistrés "
@@ -56,6 +62,7 @@ class TournamentManager:
 
         # Sélectionner les joueurs
         selected_ids = TournamentView.prompt_select_players(all_players)
+
         if len(selected_ids) < 2:
             console.print(
                 "[red]✗ Erreur : Vous devez sélectionner au moins 2 "
@@ -72,6 +79,7 @@ class TournamentManager:
         # Créer le tournoi
         try:
             rounds_count = int(tournament_data["rounds_count"])
+
         except ValueError:
             rounds_count = 4
 
@@ -95,12 +103,15 @@ class TournamentManager:
 
         # Valider puis sauvegarder
         if TournamentController.validate_tournament(tournament):
+
             if TournamentDataManager.save(tournament):
                 console.print("[green]✓ Tournoi créé avec succès ![/green]")
+
             else:
                 console.print(
                     "[red]✗ Erreur lors de la sauvegarde " "du tournoi.[/red]"
                 )
+
         else:
             console.print("[red]✗ Erreur de validation du tournoi.[/red]")
 
@@ -118,6 +129,7 @@ class TournamentManager:
 
         if tournament:
             TournamentView.display_tournament_details(tournament)
+
         else:
             console.print(
                 f"[yellow]⚠ Aucun tournoi trouvé avec le nom "
@@ -165,16 +177,20 @@ class TournamentManager:
                 TournamentManager.play_round(tournament)
                 # Sauvegarder après chaque round
                 TournamentDataManager.save(tournament)
+
             elif choice == "2":
                 # Afficher le classement
                 TournamentView.display_rankings(tournament.players)
+
             elif choice == "3":
                 # Afficher les détails
                 TournamentView.display_tournament_details(tournament)
+
             elif choice == "0":
                 # Sauvegarder avant de quitter
                 TournamentDataManager.save(tournament)
                 break
+
             else:
                 console.print("[yellow]⚠ Choix invalide.[/yellow]")
 
@@ -216,6 +232,7 @@ class TournamentManager:
 
         # Saisir les résultats de chaque match
         updated_matches = []
+
         for i, match in enumerate(new_round.matches, 1):
             player1_name = (
                 f"{match.player1.lastname} {match.player1.firstname}"
@@ -253,6 +270,7 @@ class TournamentManager:
 
         # Ajouter 1 point au joueur en "bye" s'il y en a un
         if bye_player:
+
             for i, (player, score) in enumerate(tournament.players):
                 if player.id == bye_player.id:
                     tournament.players[i][1] += 1.0

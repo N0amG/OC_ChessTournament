@@ -15,9 +15,12 @@ class MenuManager:
 
         while True:
             choice = main_menu()
+
             if choice == "1":
+
                 while True:
                     user_input = PlayerView.player_menu()
+
                     if user_input == "1":
                         player_data = PlayerView.prompt_new_player()
                         player = Player(
@@ -26,35 +29,45 @@ class MenuManager:
                             firstname=player_data["firstname"],
                             birthday=player_data["birthday"],
                         )
+
                         # Valider puis sauvegarder
                         if PlayerController.validate_player(player):
+
                             if PlayerManager.save(player):
                                 console.print(
                                     "[green]✓ Joueur créé/mis à jour "
-                                    "avec succès ![/green]"
+                                    + "avec succès ![/green]"
                                 )
+
                             else:
                                 console.print(
                                     "[red]✗ Échec de la sauvegarde "
-                                    "du joueur.[/red]"
+                                    + "du joueur.[/red]"
                                 )
+
                         else:
                             console.print(
-                                "[red]✗ Validation du joueur " "échouée.[/red]"
+                                "[red]✗ Validation du joueur "
+                                + "échouée.[/red]"
                             )
+
                     elif user_input == "2":
                         players = PlayerManager.find_all()
                         PlayerView.display_players(players)
+
                     elif user_input == "0":
                         break
+
             elif choice == "2":
                 TournamentManager.run()
+
             elif choice == "0":
                 console.print(
                     "\n[bold cyan]👋 Au revoir ! Merci d'avoir utilisé "
                     "OC Chess Tournaments.[/bold cyan]\n"
                 )
                 break
+
             else:
                 console.print(
                     "[yellow]⚠ Choix invalide. " "Veuillez réessayer.[/yellow]"
