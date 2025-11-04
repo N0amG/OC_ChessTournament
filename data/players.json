@@ -12,12 +12,6 @@
         "birthday": "1985-05-15"
     },
     {
-        "id": "EF23456",
-        "lastname": "Dubois",
-        "firstname": "Pierre",
-        "birthday": "1992-11-20"
-    },
-    {
         "id": "GH78901",
         "lastname": "Bernard",
         "firstname": "Marie",
@@ -82,5 +76,11 @@
         "lastname": "Guez",
         "firstname": "Noam",
         "birthday": "2005-07-24"
+    },
+    {
+        "id": "EF23456",
+        "lastname": "Esquie",
+        "firstname": "Pierre",
+        "birthday": "2000-01-01"
     }
 ]

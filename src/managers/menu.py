@@ -33,16 +33,17 @@ class MenuManager:
                         # Valider puis sauvegarder
                         if PlayerController.validate_player(player):
 
-                            if PlayerManager.save(player):
+                            try:
+                                PlayerManager.save(player)
                                 console.print(
                                     "[green]✓ Joueur créé/mis à jour "
                                     + "avec succès ![/green]"
                                 )
 
-                            else:
+                            except Exception as e:
                                 console.print(
                                     "[red]✗ Échec de la sauvegarde "
-                                    + "du joueur.[/red]"
+                                    + f"du joueur : {e}[/red]"
                                 )
 
                         else:

@@ -14,11 +14,10 @@ class PlayerManager:
     """Gestionnaire de données pour les joueurs"""
 
     @staticmethod
-    def save(player: Player) -> bool:
+    def save(player: Player) -> None:
         """
         Sauvegarde un joueur dans le stockage
         :param player: Player - Le joueur à sauvegarder
-        :return: bool - True si succès, False sinon
         """
         data = load_json(PLAYERS_PATH, default=[])
 
@@ -29,7 +28,6 @@ class PlayerManager:
         data.append(PlayerManager._to_dict(player))
 
         save_json(PLAYERS_PATH, data)
-        return True
 
     @staticmethod
     def find_all() -> list[Player]:
