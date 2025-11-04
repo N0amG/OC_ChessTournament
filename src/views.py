@@ -125,6 +125,7 @@ class TournamentView:
 [bold white]2[/bold white]  Lister les tournois
 [bold white]3[/bold white]  Afficher un tournoi
 [bold white]4[/bold white]  Jouer un tournoi
+[bold white]5[/bold white]  Supprimer un tournoi
 [bold white]0[/bold white]  Retour au menu principal
 """
         panel = Panel(

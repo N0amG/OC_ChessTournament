@@ -453,46 +453,64 @@
         "description": "Tournoi national à Paris"
     },
     {
-        "name": "A3",
-        "location": "Marseille",
-        "start_date": "2025-11-05",
-        "end_date": "2025-11-07",
+        "name": "B1",
+        "location": "Nice",
+        "start_date": "2025-12-01",
+        "end_date": "2026-01-02",
         "players": [
             {
                 "player": {
-                    "id": "UV67890",
-                    "lastname": "Laurent",
-                    "firstname": "Nicolas",
-                    "birthday": "1986-08-30"
+                    "id": "CD67890",
+                    "lastname": "Martin",
+                    "firstname": "Sophie",
+                    "birthday": "1985-05-15"
                 },
-                "score": 2.0
+                "score": 0.0
             },
             {
                 "player": {
-                    "id": "WX23456",
-                    "lastname": "Lefevre",
-                    "firstname": "Chloe",
-                    "birthday": "1996-01-17"
+                    "id": "EF23456",
+                    "lastname": "Dubois",
+                    "firstname": "Pierre",
+                    "birthday": "1992-11-20"
                 },
-                "score": 1.5
+                "score": 0.0
             },
             {
                 "player": {
-                    "id": "YZ78901",
-                    "lastname": "Roux",
-                    "firstname": "Antoine",
-                    "birthday": "1990-10-05"
+                    "id": "ST01234",
+                    "lastname": "Simon",
+                    "firstname": "Julie",
+                    "birthday": "1994-04-22"
                 },
-                "score": 3.0
+                "score": 0.0
             },
             {
                 "player": {
-                    "id": "EZ12465",
-                    "lastname": "Guez",
-                    "firstname": "Noam",
-                    "birthday": "2005-07-24"
+                    "id": "KL89012",
+                    "lastname": "Robert",
+                    "firstname": "Emma",
+                    "birthday": "1991-09-25"
                 },
-                "score": 4.0
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "QR56789",
+                    "lastname": "Moreau",
+                    "firstname": "Lucas",
+                    "birthday": "1989-06-18"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "IJ34567",
+                    "lastname": "Petit",
+                    "firstname": "Luc",
+                    "birthday": "1995-07-12"
+                },
+                "score": 0.0
             },
             {
                 "player": {
@@ -501,169 +519,39 @@
                     "firstname": "John",
                     "birthday": "1990-01-01"
                 },
-                "score": 1.5
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "GH78901",
+                    "lastname": "Bernard",
+                    "firstname": "Marie",
+                    "birthday": "1988-03-08"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "OP90123",
+                    "lastname": "Durand",
+                    "firstname": "Camille",
+                    "birthday": "1993-12-03"
+                },
+                "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "MN45678",
+                    "lastname": "Richard",
+                    "firstname": "Thomas",
+                    "birthday": "1987-02-14"
+                },
+                "score": 0.0
             }
         ],
-        "rounds": [
-            {
-                "name": "Round 1",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "UV67890",
-                            "lastname": "Laurent",
-                            "firstname": "Nicolas",
-                            "birthday": "1986-08-30"
-                        },
-                        "player2": {
-                            "id": "WX23456",
-                            "lastname": "Lefevre",
-                            "firstname": "Chloe",
-                            "birthday": "1996-01-17"
-                        },
-                        "score1": 1.0,
-                        "score2": 0.0
-                    },
-                    {
-                        "player1": {
-                            "id": "YZ78901",
-                            "lastname": "Roux",
-                            "firstname": "Antoine",
-                            "birthday": "1990-10-05"
-                        },
-                        "player2": {
-                            "id": "EZ12465",
-                            "lastname": "Guez",
-                            "firstname": "Noam",
-                            "birthday": "2005-07-24"
-                        },
-                        "score1": 0.0,
-                        "score2": 1.0
-                    }
-                ],
-                "started_at": "2025-11-03 17:04:11",
-                "ended_at": "2025-11-03 17:04:20"
-            },
-            {
-                "name": "Round 2",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "UV67890",
-                            "lastname": "Laurent",
-                            "firstname": "Nicolas",
-                            "birthday": "1986-08-30"
-                        },
-                        "player2": {
-                            "id": "EZ12465",
-                            "lastname": "Guez",
-                            "firstname": "Noam",
-                            "birthday": "2005-07-24"
-                        },
-                        "score1": 0.0,
-                        "score2": 1.0
-                    },
-                    {
-                        "player1": {
-                            "id": "AB12345",
-                            "lastname": "Doe",
-                            "firstname": "John",
-                            "birthday": "1990-01-01"
-                        },
-                        "player2": {
-                            "id": "WX23456",
-                            "lastname": "Lefevre",
-                            "firstname": "Chloe",
-                            "birthday": "1996-01-17"
-                        },
-                        "score1": 0.5,
-                        "score2": 0.5
-                    }
-                ],
-                "started_at": "2025-11-03 17:04:22",
-                "ended_at": "2025-11-03 17:04:26"
-            },
-            {
-                "name": "Round 3",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "EZ12465",
-                            "lastname": "Guez",
-                            "firstname": "Noam",
-                            "birthday": "2005-07-24"
-                        },
-                        "player2": {
-                            "id": "AB12345",
-                            "lastname": "Doe",
-                            "firstname": "John",
-                            "birthday": "1990-01-01"
-                        },
-                        "score1": 1.0,
-                        "score2": 0.0
-                    },
-                    {
-                        "player1": {
-                            "id": "UV67890",
-                            "lastname": "Laurent",
-                            "firstname": "Nicolas",
-                            "birthday": "1986-08-30"
-                        },
-                        "player2": {
-                            "id": "YZ78901",
-                            "lastname": "Roux",
-                            "firstname": "Antoine",
-                            "birthday": "1990-10-05"
-                        },
-                        "score1": 0.0,
-                        "score2": 1.0
-                    }
-                ],
-                "started_at": "2025-11-03 17:04:28",
-                "ended_at": "2025-11-03 17:04:33"
-            },
-            {
-                "name": "Round 4",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "EZ12465",
-                            "lastname": "Guez",
-                            "firstname": "Noam",
-                            "birthday": "2005-07-24"
-                        },
-                        "player2": {
-                            "id": "WX23456",
-                            "lastname": "Lefevre",
-                            "firstname": "Chloe",
-                            "birthday": "1996-01-17"
-                        },
-                        "score1": 1.0,
-                        "score2": 0.0
-                    },
-                    {
-                        "player1": {
-                            "id": "YZ78901",
-                            "lastname": "Roux",
-                            "firstname": "Antoine",
-                            "birthday": "1990-10-05"
-                        },
-                        "player2": {
-                            "id": "AB12345",
-                            "lastname": "Doe",
-                            "firstname": "John",
-                            "birthday": "1990-01-01"
-                        },
-                        "score1": 1.0,
-                        "score2": 0.0
-                    }
-                ],
-                "started_at": "2025-11-03 17:04:34",
-                "ended_at": "2025-11-03 17:04:42"
-            }
-        ],
-        "rounds_count": 4,
-        "current_round": 5,
-        "description": "Tournoi régional de Marseille"
+        "rounds": [],
+        "rounds_count": 5,
+        "current_round": 1,
+        "description": "Ceci est un tournois d'hiver"
     }
 ]

@@ -37,6 +37,9 @@ class TournamentManager:
             elif choice == "4":
                 TournamentManager.play_tournament()
 
+            elif choice == "5":
+                TournamentManager.delete_tournament()
+
             elif choice == "0":
                 break
 
@@ -120,6 +123,23 @@ class TournamentManager:
         """Lister tous les tournois"""
         tournaments = TournamentDataManager.find_all()
         TournamentView.display_tournaments(tournaments)
+
+    @staticmethod
+    def delete_tournament():
+        """Supprimer un tournoi"""
+        name = TournamentView.prompt_tournament_name()
+        tournament = TournamentDataManager.find_by_name(name)
+
+        if tournament:
+            TournamentDataManager.delete(name)
+            console.print(
+                "[green]✓ Tournoi supprimé avec succès ![/green]"
+            )
+        else:
+            console.print(
+                f"[red]✗ Aucun tournoi trouvé avec le nom "
+                f"'{name}'.[/red]"
+            )
 
     @staticmethod
     def show_tournament_details():
