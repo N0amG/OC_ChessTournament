@@ -54,7 +54,20 @@ class MenuManager:
                     elif user_input == "2":
                         players = PlayerManager.find_all()
                         PlayerView.display_players(players)
-
+                    elif user_input == "3":
+                        player_id = PlayerView.prompt_delete_player()
+                        player = PlayerManager.find_by_id(player_id)
+                        if player:
+                            PlayerManager.delete(player_id)
+                            console.print(
+                                "[green]✓ Joueur supprimé avec "
+                                + "succès ![/green]"
+                            )
+                        else:
+                            console.print(
+                                "[red]✗ Aucun joueur trouvé avec "
+                                + "cet ID.[/red]"
+                            )
                     elif user_input == "0":
                         break
 

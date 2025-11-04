@@ -50,6 +50,7 @@ class PlayerView:
         menu_content = """
 [bold white]1[/bold white]  Créer un joueur
 [bold white]2[/bold white]  Lister les joueurs
+[bold white]3[/bold white]  Supprimer un joueur
 [bold white]0[/bold white]  Retour au menu principal
 """
         panel = Panel(
@@ -75,6 +76,14 @@ class PlayerView:
                 "[cyan]Date de naissance (YYYY-MM-DD)[/cyan]"
             ).strip(),
         }
+
+    @staticmethod
+    def prompt_delete_player() -> str:
+        """Demande l'ID d'un joueur à supprimer"""
+        console.print(
+            "\n[bold red]➖ Supprimer un joueur[/bold red]", style="bold"
+        )
+        return Prompt.ask("[cyan]ID du joueur à supprimer[/cyan]").strip()
 
     @staticmethod
     def display_players(players: list[Player]) -> None:
