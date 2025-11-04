@@ -14,7 +14,7 @@ from models import Player, Tournament
 console = Console()
 
 
-def clear_screen():
+def clear_screen() -> None:
     """Clear l'écran de manière compatible multi-plateforme"""
     os.system("cls" if os.name == "nt" else "clear")
 

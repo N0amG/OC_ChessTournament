@@ -46,6 +46,13 @@ class TournamentController:
         """
         date_regex = r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$"
 
+        if (not start_date and not end_date) or \
+                (start_date == "" and end_date == ""):
+            if (not start_date):
+                start_date = datetime.now().strftime("%Y-%m-%d")
+            if (not end_date):
+                end_date = datetime.now().strftime("%Y-%m-%d")
+
         # Vérifier le format de la date de début
         if start_date and not re.match(date_regex, start_date):
             print("Invalid start_date format. Expected: YYYY-MM-DD")
