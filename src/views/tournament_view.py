@@ -1,117 +1,16 @@
-import os
 from datetime import datetime
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.table import Table
-from rich.text import Text
 from rich.tree import Tree
 
 from models import Player, Tournament
+from .logger_view import LoggerView
+from .utils import clear_screen
 
-# Instance globale de console Rich
 console = Console()
-
-
-def clear_screen() -> None:
-    """Clear l'écran de manière compatible multi-plateforme"""
-    os.system("cls" if os.name == "nt" else "clear")
-
-
-def main_menu() -> str:
-    """Affiche le menu principal avec Rich"""
-    clear_screen()
-    menu_text = Text()
-    menu_text.append("🏆 OC Chess Tournaments 🏆", style="bold cyan")
-
-    menu_content = """
-[bold white]1[/bold white]  Gérer les joueurs
-[bold white]2[/bold white]  Gérer les tournois
-[bold white]0[/bold white]  Quitter
-"""
-
-    panel = Panel(
-        menu_content.strip(),
-        title=menu_text,
-        border_style="cyan",
-        padding=(1, 2),
-    )
-    console.print(panel)
-    return Prompt.ask("[bold cyan]>[/bold cyan]", default="").strip()
-
-
-class PlayerView:
-
-    @staticmethod
-    def player_menu() -> str:
-        """Menu de gestion des joueurs avec Rich"""
-        console.print()
-        menu_content = """
-[bold white]1[/bold white]  Créer un joueur
-[bold white]2[/bold white]  Lister les joueurs
-[bold white]3[/bold white]  Supprimer un joueur
-[bold white]0[/bold white]  Retour au menu principal
-"""
-        panel = Panel(
-            menu_content.strip(),
-            title="[bold yellow]👥 Gestion des joueurs[/bold yellow]",
-            border_style="yellow",
-            padding=(1, 2),
-        )
-        console.print(panel)
-        return Prompt.ask("[bold yellow]>[/bold yellow]", default="").strip()
-
-    @staticmethod
-    def prompt_new_player() -> str:
-        """Demande les informations d'un nouveau joueur"""
-        console.print(
-            "\n[bold yellow]➕ Nouveau joueur[/bold yellow]", style="bold"
-        )
-        return {
-            "id": Prompt.ask("[cyan]ID (ex: AB12345)[/cyan]").strip(),
-            "lastname": Prompt.ask("[cyan]Nom[/cyan]").strip(),
-            "firstname": Prompt.ask("[cyan]Prénom[/cyan]").strip(),
-            "birthday": Prompt.ask(
-                "[cyan]Date de naissance (YYYY-MM-DD)[/cyan]"
-            ).strip(),
-        }
-
-    @staticmethod
-    def prompt_delete_player() -> str:
-        """Demande l'ID d'un joueur à supprimer"""
-        console.print(
-            "\n[bold red]➖ Supprimer un joueur[/bold red]", style="bold"
-        )
-        return Prompt.ask("[cyan]ID du joueur à supprimer[/cyan]").strip()
-
-    @staticmethod
-    def display_players(players: list[Player]) -> None:
-        """Affiche la liste des joueurs dans un tableau Rich"""
-        console.print()
-        if not players:
-            console.print("[yellow]ℹ Aucun joueur enregistré.[/yellow]")
-            return
-
-        table = Table(
-            title="[bold yellow]📋 Liste des joueurs[/bold yellow]",
-            show_header=True,
-            header_style="bold cyan",
-            border_style="yellow",
-            title_style="bold yellow",
-        )
-
-        table.add_column("ID", style="cyan", no_wrap=True)
-        table.add_column("Nom", style="white")
-        table.add_column("Prénom", style="white")
-        table.add_column("Date de naissance", style="dim")
-
-        for player in players:
-            table.add_row(
-                player.id, player.lastname, player.firstname, player.birthday
-            )
-
-        console.print(table)
 
 
 class TournamentView:
@@ -135,7 +34,14 @@ class TournamentView:
             padding=(1, 2),
         )
         console.print(panel)
-        return Prompt.ask("[bold green]>[/bold green]", default="").strip()
+        choice = Prompt.ask(
+            "[bold green]>[/bold green]",
+            default="",
+        ).strip()
+
+        if choice == "4":
+            clear_screen()
+        return choice
 
     @staticmethod
     def prompt_new_tournament() -> dict:
@@ -191,7 +97,6 @@ class TournamentView:
         table.add_column("Statut", style="yellow")
 
         for tournament in tournaments:
-            # Déterminer le statut
             if tournament.current_round > tournament.rounds_count:
                 status = "[green]✓ Terminé[/green]"
             else:
@@ -210,18 +115,75 @@ class TournamentView:
 
         console.print(table)
 
+    # ===== Messages et affichages divers ===== #
+
+    @staticmethod
+    def display_tournament_already_finished() -> None:
+        console.print(
+            "\n[bold yellow]🏁 Ce tournoi est déjà terminé ![/bold yellow]\n"
+        )
+
+    @staticmethod
+    def display_tournament_round_banner(
+        name: str,
+        current_round: int,
+        rounds_count: int,
+    ) -> None:
+        console.print(f"\n[bold cyan]{'=' * 50}[/bold cyan]")
+        console.print(f"[bold green]🏆 TOURNOI: {name}[/bold green]")
+        console.print(
+            f"[bold yellow]Round {current_round}/{rounds_count}[/bold yellow]"
+        )
+        console.print(f"[bold cyan]{'=' * 50}[/bold cyan]")
+
+    @staticmethod
+    def display_tournament_finished() -> None:
+        console.print(f"\n[bold green]{'=' * 50}[/bold green]")
+        console.print("[bold yellow]🏁 TOURNOI TERMINÉ ![/bold yellow]")
+        console.print(f"[bold green]{'=' * 50}[/bold green]")
+
+    @staticmethod
+    def display_round_already_played(round_num: int) -> None:
+        LoggerView.warning(f"Le round {round_num} a déjà été joué.")
+
+    @staticmethod
+    def display_round_banner(round_num: int) -> None:
+        console.print(f"\n[bold cyan]{'=' * 50}[/bold cyan]")
+        console.print(f"[bold yellow]🎯 ROUND {round_num}[/bold yellow]")
+        console.print(f"[bold cyan]{'=' * 50}[/bold cyan]")
+
+    @staticmethod
+    def display_bye_message(bye_player: Player) -> None:
+        LoggerView.warning(
+            (
+                f"⚡ {bye_player.lastname} {bye_player.firstname} a un BYE ce "
+                "round (victoire par forfait : +1 point)"
+            )
+        )
+
+    @staticmethod
+    def display_bye_points_awarded(bye_player: Player) -> None:
+        LoggerView.success(
+            (
+                f"{bye_player.lastname} {bye_player.firstname} reçoit 1 point "
+                "(bye)"
+            )
+        )
+
+    @staticmethod
+    def display_round_completed(round_num: int) -> None:
+        LoggerView.success(f"Round {round_num} terminé !")
+
     @staticmethod
     def display_tournament_details(tournament: Tournament) -> None:
         """Affiche les détails d'un tournoi avec un Tree Rich"""
         console.print()
 
-        # Créer l'arbre du tournoi
         tree = Tree(
             f"[bold green]🏆 {tournament.name}[/bold green]",
             guide_style="dim cyan",
         )
 
-        # Informations générales
         info_branch = tree.add("[bold cyan]📋 Informations[/bold cyan]")
         info_branch.add("[white]Lieu:[/white] {}".format(tournament.location))
         info_branch.add(
@@ -236,7 +198,6 @@ class TournamentView:
             )
         )
 
-        # Progression
         progress_text = f"{tournament.current_round}/{tournament.rounds_count}"
         if tournament.current_round > tournament.rounds_count:
             progress_text += " [green]✓ Terminé[/green]"
@@ -244,20 +205,18 @@ class TournamentView:
             progress_text += " [yellow]⏳ En cours[/yellow]"
         info_branch.add(f"[white]Progression:[/white] {progress_text}")
 
-        # Joueurs
         players_branch = tree.add(
             "[bold cyan]👥 Joueurs ({})[/bold cyan]".format(
                 len(tournament.players)
             )
         )
 
-        # Trier les joueurs par score pour l'affichage
         sorted_players = sorted(
             tournament.players,
             key=lambda player_data: player_data[1],
             reverse=True,
         )
-        for player, score in sorted_players[:5]:  # Afficher top 5
+        for player, score in sorted_players[:5]:
             players_branch.add(
                 (
                     f"[white]{player.lastname} {player.firstname}[/white]"
@@ -268,7 +227,6 @@ class TournamentView:
             extra_count = len(tournament.players) - 5
             players_branch.add(f"[dim]... et {extra_count} autres[/dim]")
 
-        # Rounds
         rounds_branch = tree.add(
             "[bold cyan]🎯 Rounds ({}/{})[/bold cyan]".format(
                 len(tournament.rounds),
@@ -297,7 +255,6 @@ class TournamentView:
         console.print()
         console.print("[bold cyan]👥 Sélection des joueurs[/bold cyan]\n")
 
-        # Afficher le tableau des joueurs disponibles
         table = Table(
             show_header=True, header_style="bold cyan", border_style="cyan"
         )
@@ -333,14 +290,24 @@ class TournamentView:
     @staticmethod
     def display_round_matches(round_obj: dict, round_num: int) -> None:
         """Afficher les matchs d'un round"""
-        print(f"\n{'='*50}")
-        print(f"ROUND {round_num}")
-        print(f"{'='*50}")
-
+        console.print()
         matches = round_obj.get("matches", [])
+
         if not matches:
-            print("Aucun match dans ce round.")
+            LoggerView.info("Aucun match enregistré pour ce round.")
             return
+
+        table = Table(
+            title=f"[bold cyan]🎯 Round {round_num}[/bold cyan]",
+            show_header=True,
+            header_style="bold cyan",
+            border_style="cyan",
+        )
+
+        table.add_column("Match", justify="center", style="yellow")
+        table.add_column("Joueur 1", style="white")
+        table.add_column("Score", justify="center", style="white")
+        table.add_column("Joueur 2", style="white")
 
         for i, match in enumerate(matches, 1):
             player1 = match["player1"]
@@ -348,12 +315,14 @@ class TournamentView:
             score1 = match.get("score1", 0.0)
             score2 = match.get("score2", 0.0)
 
-            print(f"\nMatch {i}:")
-            print(
-                f"  {player1['lastname']} {player1['firstname']} "
-                f"({score1}) vs "
-                f"{player2['lastname']} {player2['firstname']} ({score2})"
+            table.add_row(
+                str(i),
+                f"{player1['lastname']} {player1['firstname']}",
+                f"{score1} - {score2}",
+                f"{player2['lastname']} {player2['firstname']}",
             )
+
+        console.print(table)
 
     @staticmethod
     def prompt_match_result(
@@ -409,7 +378,6 @@ class TournamentView:
         """
         console.print()
 
-        # Trier par score décroissant
         sorted_players = sorted(
             players_data,
             key=lambda player_data: player_data[1],
@@ -462,7 +430,15 @@ class TournamentView:
             padding=(1, 2),
         )
         console.print(panel)
-        return Prompt.ask("[bold magenta]>[/bold magenta]", default="").strip()
+        choice = Prompt.ask(
+            "[bold magenta]>[/bold magenta]",
+            default="",
+        ).strip()
+
+        if choice == "0":
+            clear_screen()
+
+        return choice
 
     @staticmethod
     def confirm_action(message: str) -> bool:

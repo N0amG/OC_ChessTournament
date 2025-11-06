@@ -2,3 +2,6 @@ venv/
 .vscode/
 __pycache__/
 *.pyc
+
+note.txt
+architechture_exemple.py

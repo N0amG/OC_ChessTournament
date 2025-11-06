@@ -1,9 +1,9 @@
-"""Managers package for handling high-level business logic."""
+"""Managers package regroupant orchestration et accès aux données."""
 
-from managers.menu import MenuManager
-from managers.tournament import TournamentManager
+from .player_manager import PlayerManager
+from .tournament_manager import TournamentManager
 
 __all__ = [
-    "MenuManager",
+    "PlayerManager",
     "TournamentManager",
 ]
