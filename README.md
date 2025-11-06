@@ -5,169 +5,412 @@ Application de gestion de tournois d'échecs utilisant le système suisse.
 ## 📋 Description
 
 Cette application permet de :
-- Gérer les joueurs (création, liste)
+- Gérer les joueurs (création, liste, suppression)
 - Créer et gérer des tournois d'échecs
 - Organiser les rounds selon le système suisse
-- Gérer automatiquement les "bye" (victoire par forfait) pour les nombres impairs de joueurs
-- Sauvegarder les données en JSON
+- Gérer automatiquement les « bye » (victoire par forfait) pour les nombres impairs de joueurs
+- Sauvegarder toutes les données en JSON
 
 ## 🏗️ Architecture
 
-Le projet suit une **architecture en couches** avec une séparation claire des responsabilités :
+L'application suit une architecture MVC allégée où chaque couche reste strictement limitée à son rôle :
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    Views (UI)                       │
-│         Interface utilisateur (console)             │
-└────────────────────┬────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────┐
-│                   Managers                          │
-│        Orchestration de la logique métier           │
-└────────┬────────────────────────────────────┬───────┘
-         │                                    │
-┌────────▼────────────┐            ┌─────────▼────────┐
-│    Controllers      │            │  Data Managers   │
-│  (Business Logic)   │            │  (Persistence)   │
-│                     │            │                  │
-│ - Validation        │            │ - CRUD           │
-│ - Algorithmes       │            │ - Conversions    │
-│ - Règles métier     │            │   dict ↔ Entity  │
-└─────────────────────┘            └─────────┬────────┘
-                                             │
-                                   ┌─────────▼────────┐
-                                   │     Storage      │
-                                   │   (JSON I/O)     │
-                                   └──────────────────┘
+┌─────────────────────────────┐
+│           Views             │
+│ Interface console Rich      │
+└──────────────▲──────────────┘
+               │
+┌──────────────┴──────────────┐
+│         Controllers         │
+│ Orchestration + règles métier│
+└──────────────▲──────────────┘
+               │
+┌──────────────┴──────────────┐
+│          Managers           │
+│ Persistance JSON            │
+└──────────────▲──────────────┘
+               │
+┌──────────────┴──────────────┐
+│           Models            │
+│ Entités métier              │
+└─────────────────────────────┘
 ```
 
-### 📁 Structure du projet
+- **Views** : affichage Rich et saisie utilisateur, aucun accès métier ou persistance.
+- **Controllers** : coordonnent vues/managers, appliquent les règles métier (validation, système suisse, gestion des byes...).
+- **Managers** : seules classes autorisées à lire/écrire dans les fichiers JSON via `storage.py`.
+- **Models** : entités métiers (Player, Match, Round, Tournament) responsables de leurs conversions `to_dict`/`from_dict`.
+- **Views/utils** : fonctions utilitaires partagées côté interface (`clear_screen`).
+
+## 📁 Structure du projet
 
 ```
 OC_ChessTournament/
 │
-├── data/                           # Données JSON
-│   ├── players.json                # Base de données des joueurs
-│   └── tournaments.json            # Base de données des tournois
+├── data/
+│   ├── players.json               # Données persistées des joueurs
+│   └── tournaments.json           # Données persistées des tournois
 │
 ├── src/
-│   ├── app.py                      # Point d'entrée de l'application
-│   ├── models.py                   # Entités (Player, Match, Round, Tournament)
-│   ├── views.py                    # Interface utilisateur (console)
+│   ├── app.py                     # Point d'entrée de l'application
 │   │
-│   ├── data_managers/              # 📦 Couche de persistance
-│   │   ├── __init__.py             # Exports des managers
-│   │   ├── storage.py              # Fonctions bas-niveau (load_json, save_json)
-│   │   ├── player_manager.py       # CRUD Player + conversions dict↔Player
-│   │   └── tournament_manager.py   # CRUD Tournament + conversions complexes
-│   │
-│   ├── controllers/                # 🎮 Logique métier
+│   ├── controllers/               # Logique métier et orchestration
 │   │   ├── __init__.py
-│   │   ├── player.py               # Validation des joueurs
-│   │   ├── match.py                # Algorithmes d'appariement
-│   │   ├── round.py                # Gestion des rounds
-│   │   └── tournament.py           # Validation des tournois
+│   │   ├── main_controller.py     # Boucle principale
+│   │   ├── match.py               # Gestion des matchs
+│   │   ├── player.py              # Validation des joueurs
+│   │   ├── round.py               # Gestion des rounds
+│   │   └── tournament.py          # Gestion complète des tournois
 │   │
-│   └── managers/                   # 🎯 Orchestration
+│   ├── managers/                  # Persistance JSON
+│   │   ├── __init__.py
+│   │   ├── player_manager.py      # CRUD Player
+│   │   ├── storage.py             # Utilitaires JSON génériques
+│   │   └── tournament_manager.py  # CRUD Tournament
+│   │
+│   ├── models/                    # Entités métiers + sérialisation
+│   │   ├── __init__.py
+│   │   ├── match.py
+│   │   ├── player.py
+│   │   ├── round.py
+│   │   └── tournament.py
+│   │
+│   └── views/                     # Interface console Rich
 │       ├── __init__.py
-│       ├── menu.py                 # Gestion du menu principal
-│       └── tournament.py           # Orchestration des tournois
+│       ├── logger_view.py         # Messages standardisés
+│       ├── main_view.py           # Menu principal
+│       ├── player_view.py         # UI gestion des joueurs
+│       ├── tournament_view.py     # UI gestion des tournois
+│       └── utils.py               # clear_screen et helpers UI
 │
 └── README.md
 ```
 
 ## 🔄 Flux de données
 
-### Exemple : Création d'un joueur
+### Création d'un joueur
 
 ```
-1. View (views.py)
-   └─> Demande les informations à l'utilisateur
-   
-2. Manager (managers/menu.py)
-   └─> Crée l'objet Player
-   
-3. Controller (controllers/player.py)
-   └─> Valide les données (format ID, nom, date)
-   
-4. Data Manager (data_managers/player_manager.py)
-   └─> Convertit Player → dict
-   └─> Sauvegarde dans JSON via storage.py
+1. PlayerView.prompt_new_player() recueille les entrées utilisateur.
+2. PlayerController.create_player() construit l'entité Player et valide les champs.
+3. PlayerManager.save() convertit le Player en dict et met à jour `players.json`.
+4. LoggerView affiche le succès/échec dans la console.
 ```
 
-### Exemple : Jouer un tournoi
+### Jouer un round de tournoi
 
 ```
-1. View (views.py)
-   └─> Affiche le menu et demande le nom du tournoi
-   
-2. Manager (managers/tournament.py)
-   └─> Orchestre le flux du tournoi
-   
-3. Data Manager (data_managers/tournament_manager.py)
-   └─> Charge le tournoi depuis JSON
-   └─> Convertit dict → Tournament (avec Players, Rounds, Matches)
-   
-4. Controller (controllers/round.py)
-   └─> Crée un nouveau round
-   
-5. Controller (controllers/match.py)
-   └─> Génère les appariements selon le système suisse
-   
-6. View (views.py)
-   └─> Affiche les matchs et demande les résultats
-   
-7. Controller (controllers/round.py)
-   └─> Met à jour les scores du tournoi
-   
-8. Data Manager (data_managers/tournament_manager.py)
-   └─> Sauvegarde le tournoi mis à jour
+1. TournamentView.play_tournament_menu() récupère l'action choisie.
+2. TournamentController._play_round() orchestre la création du round.
+3. RoundController.create_round() génère les matchs via MatchController.
+4. TournamentView.prompt_match_result() demande les scores, LoggerView affiche les statuts.
+5. RoundController.update_tournament_scores() met à jour les scores joueurs.
+6. TournamentManager.save() persiste l'état du tournoi dans `tournaments.json`.
 ```
 
 ## 🎯 Séparation des responsabilités
 
-### 1. **Views** (`views.py`)
-- **Rôle** : Interface utilisateur
-- **Responsabilités** :
-  - Afficher les menus
-  - Demander les entrées utilisateur
-  - Afficher les résultats
-- **Ne fait PAS** : Validation, accès aux données, logique métier
+### Views (`src/views/`)
+- Affichent les menus Rich, les tableaux et les résultats.
+- Demandent les entrées utilisateur et les renvoient aux controllers.
+- Utilisent `LoggerView` pour les messages standardisés.
+- N'accèdent jamais aux fichiers ou à la logique métier.
 
-### 2. **Managers** (`managers/`)
-- **Rôle** : Orchestration
-- **Responsabilités** :
-  - Coordonner les différentes couches
-  - Gérer le flux de l'application
-  - Appeler les controllers pour la validation
-  - Appeler les data_managers pour la persistance
-- **Ne fait PAS** : Accès direct aux données, validation détaillée
+### Controllers (`src/controllers/`)
+- Coordonnent les vues et les managers.
+- Appliquent la validation (formats, règles métier, dates...).
+- Implémentent le système suisse et la gestion des rounds.
+- Ne manipulent pas directement les fichiers JSON.
 
-### 3. **Controllers** (`controllers/`)
-- **Rôle** : Logique métier pure
-- **Responsabilités** :
-  - Validation des données (formats, règles métier)
-  - Algorithmes (appariement Swiss, gestion des byes)
-  - Règles du jeu
-- **Ne fait PAS** : Accès aux données, conversion dict↔entity
+### Managers (`src/managers/`)
+- Assurent le CRUD sur les fichiers JSON.
+- Utilisent les méthodes `to_dict`/`from_dict` fournies par les modèles.
+- Ne contiennent pas de logique d'affichage ou de validation métier.
 
-### 4. **Data Managers** (`data_managers/`)
-- **Rôle** : Couche de persistance
-- **Responsabilités** :
-  - CRUD (Create, Read, Update, Delete)
-  - Conversions dict ↔ Entity
-  - Interaction avec storage.py
-- **Ne fait PAS** : Validation métier, logique algorithmique
+### Models (`src/models/`)
+- Représentent les entités métier.
+- Fournissent `to_dict` et `from_dict` pour encapsuler la sérialisation.
+- Sont utilisés par les managers, controllers et vues (pour l'affichage).
 
-### 5. **Storage** (`data_managers/storage.py`)
-- **Rôle** : I/O JSON
-- **Responsabilités** :
-  - Lire les fichiers JSON
-  - Écrire les fichiers JSON
-- **Ne fait PAS** : Conversions, validation
+### Utils (`src/views/utils.py`)
+- Fonctions utilitaires spécifiques à l'interface console (`clear_screen`).
 
 ## 🎲 Système Suisse
 
+1. **Premier round** : appariement aléatoire des joueurs.
+2. **Rounds suivants** : appariement par score (les meilleurs s'affrontent).
+3. **Rematches évités** : MatchController garde les paires déjà jouées.
+4. **Gestion des « bye »** : un joueur est automatiquement qualifié si le nombre de participants est impair et reçoit 1 point.
+
+## 🚀 Installation et utilisation
+
+### Prérequis
+
+- Python 3.10 ou supérieur
+
+### Installation
+
+```powershell
+# Cloner le dépôt
+
+cd OC_ChessTournament
+
+# Créer l'environnement virtuel (Windows)
+python -m venv .venv
+
+# Activer l'environnement virtuel
+.\.venv\Scripts\Activate.ps1
+
+# Installer les dépendances
+pip install -r requirements.txt
+```
+
+### Lancement
+
+```powershell
+python src/app.py
+```
+
+Sortir de l'application : saisir `0` dans le menu principal.
+
+### Qualité de code
+
+```powershell
+# Analyse Flake8
+python -m flake8 src
+
+# Rapport HTML
+## � Système Suisse
+python -m flake8 src --format=html --htmldir=flake8-report
+start .\flake8-report\index.html
+```
+
+### Désactivation de l'environnement virtuel
+
+```powershell
+
+```
+
+## 📝 Modèle de données
+
+Les entités ne sont pas des `dataclass` : elles encapsulent leur sérialisation.
+
+```python
+# src/models/player.py
+class Player:
+    def __init__(self, id: str, lastname: str, firstname: str, birthday: str) -> None:
+        self.id = id
+        self.lastname = lastname
+        self.firstname = firstname
+        self.birthday = birthday
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "id": self.id,
+            "lastname": self.lastname,
+            "firstname": self.firstname,
+            "birthday": self.birthday,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, str]) -> "Player":
+        return cls(
+            id=data["id"],
+            lastname=data["lastname"],
+            firstname=data["firstname"],
+            birthday=data["birthday"],
+        )
+```
+
+```python
+# src/models/match.py
+class Match:
+    def __init__(self, player1: Player, player2: Player, score1: float = 0.0, score2: float = 0.0) -> None:
+        self.player1 = player1
+        self.player2 = player2
+        self.score1 = score1
+        self.score2 = score2
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "player1": self.player1.to_dict(),
+            "player2": self.player2.to_dict(),
+            "score1": self.score1,
+            "score2": self.score2,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Match":
+        return cls(
+            player1=Player.from_dict(data["player1"]),
+            player2=Player.from_dict(data["player2"]),
+            score1=data.get("score1", 0.0),
+            score2=data.get("score2", 0.0),
+        )
+```
+
+```python
+# src/models/round.py
+class Round:
+    def __init__(self, name: str, matches: list[Match], started_at: str | None = None, ended_at: str | None = None) -> None:
+        self.name = name
+        self.matches = matches
+        self.started_at = started_at
+        self.ended_at = ended_at
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "matches": [match.to_dict() for match in self.matches],
+            "started_at": self.started_at,
+            "ended_at": self.ended_at,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Round":
+        matches = [Match.from_dict(raw) for raw in data.get("matches", [])]
+        return cls(
+            name=data["name"],
+            matches=matches,
+            started_at=data.get("started_at"),
+            ended_at=data.get("ended_at"),
+        )
+```
+
+```python
+# src/models/tournament.py
+class Tournament:
+    def __init__(
+        self,
+        name: str,
+        location: str,
+        start_date: str,
+        end_date: str,
+        players: list[list[Any]],  # [[Player, score], ...]
+        rounds: list[Round],
+        rounds_count: int = 4,
+        current_round: int = 1,
+        description: str = "",
+    ) -> None:
+        self.name = name
+        self.location = location
+        self.start_date = start_date
+        self.end_date = end_date
+        self.players = players
+        self.rounds = rounds
+        self.rounds_count = rounds_count
+        self.current_round = current_round
+        self.description = description
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "location": self.location,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "players": [
+                {
+                    "player": player.to_dict(),
+                    "score": score,
+                }
+                for player, score in self.players
+            ],
+            "rounds": [round_obj.to_dict() for round_obj in self.rounds],
+            "rounds_count": self.rounds_count,
+            "current_round": self.current_round,
+            "description": self.description,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Tournament":
+        players = []
+        for entry in data.get("players", []):
+            player = Player.from_dict(entry["player"])
+            score = float(entry.get("score", 0.0))
+            players.append([player, score])
+
+        rounds = [Round.from_dict(raw) for raw in data.get("rounds", [])]
+
+        return cls(
+            name=data["name"],
+            location=data["location"],
+            start_date=data["start_date"],
+            end_date=data["end_date"],
+            players=players,
+            rounds=rounds,
+            rounds_count=int(data.get("rounds_count", 4)),
+            current_round=int(data.get("current_round", 1)),
+            description=data.get("description", ""),
+        )
+```
+
+## 🔧 Validation des données
+
+- **ID joueur** : regex `^[A-Z]{2}\d{5}$`
+- **Nom / prénom** : première lettre majuscule, lettres/espaces/traits d'union, accents autorisés
+- **Date de naissance** : format `YYYY-MM-DD`
+- **Dates tournoi** : `end_date` ≥ `start_date`
+
+## 📊 Exemple de données JSON
+
+### players.json
+
+```json
+[
+  {
+    "id": "AB12345",
+    "lastname": "Doe",
+    "firstname": "John",
+    "birthday": "1990-01-01"
+  }
+]
+```
+
+### tournaments.json
+
+```json
+[
+  {
+    "name": "Tournoi A1",
+    "location": "Paris",
+    "start_date": "2025-11-01",
+    "end_date": "2025-11-01",
+    "description": "Premier tournoi",
+    "rounds_count": 4,
+    "current_round": 1,
+    "players": [
+      {
+        "player": {
+          "id": "AB12345",
+          "lastname": "Doe",
+          "firstname": "John",
+          "birthday": "1990-01-01"
+        },
+        "score": 0.0
+      }
+    ],
+    "rounds": []
+  }
+]
+```
+
+## 🤝 Contribution
+
+Projet réalisé dans le cadre de la formation OpenClassrooms « Développeur d'application Python ».
+
+## 📄 Licence
+
+MIT License.
+
+## 👤 Auteur
+
+**Noam G**  
+GitHub : [@N0amG](https://github.com/N0amG)
+
+---
+
+*Projet 4 - OpenClassrooms - Développeur d'application Python*
 ### Principe
 
 1. **Premier round** : Appariement aléatoire des joueurs
