@@ -56,7 +56,7 @@ class Tournament:
         """Reconstruit un tournoi depuis un dictionnaire."""
         players: list[list[Any]] = []
         for entry in data.get("players", []):
-            player = Player.from_dict(entry["player"])
+            player = Player(**entry["player"])
             score = float(entry.get("score", 0.0))
             players.append([player, score])
 

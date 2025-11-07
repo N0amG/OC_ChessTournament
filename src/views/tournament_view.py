@@ -7,8 +7,9 @@ from rich.table import Table
 from rich.tree import Tree
 
 from models import Player, Tournament
+from utils import clear_screen
+
 from .logger_view import LoggerView
-from .utils import clear_screen
 
 console = Console()
 

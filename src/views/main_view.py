@@ -3,7 +3,7 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.text import Text
 
-from .utils import clear_screen
+from utils import clear_screen
 
 console = Console()
 

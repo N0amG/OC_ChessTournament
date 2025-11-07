@@ -1,8 +1,7 @@
 """TournamentManager - Gestion de la persistance des tournois."""
 
 from models import Tournament
-
-from .storage import load_json, save_json
+from utils import load_json, save_json
 
 
 TOURNAMENTS_PATH = "data/tournaments.json"

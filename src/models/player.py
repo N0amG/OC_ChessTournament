@@ -1,7 +1,5 @@
 """Modèle représentant un joueur."""
 
-from typing import Self
-
 
 class Player:
     """Informations d'identité pour un joueur."""
@@ -26,13 +24,3 @@ class Player:
             "firstname": self.firstname,
             "birthday": self.birthday,
         }
-
-    @classmethod
-    def from_dict(cls, data: dict[str, str]) -> Self:
-        """Reconstruit un joueur depuis un dictionnaire."""
-        return cls(
-            id=data["id"],
-            lastname=data["lastname"],
-            firstname=data["firstname"],
-            birthday=data["birthday"],
-        )

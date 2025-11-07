@@ -1,5 +1,8 @@
 from datetime import datetime
+
 from models import Player, Round, Tournament
+from utils.match_utils import pair_players_by_score, pair_players_first_round
+
 from .match import MatchController
 
 
@@ -22,13 +25,9 @@ class RoundController:
             players_list = [
                 player_data[0] for player_data in tournament.players
             ]
-            matches, bye_player = (
-                self.match_controller.pair_players_first_round(players_list)
-            )
+            matches, bye_player = pair_players_first_round(players_list)
         else:
-            matches, bye_player = self.match_controller.pair_players_by_score(
-                tournament
-            )
+            matches, bye_player = pair_players_by_score(tournament)
 
         new_round = Round(
             name=f"Round {round_num}",

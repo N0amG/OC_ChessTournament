@@ -1,6 +1,6 @@
 """Modèle représentant un match d'échecs."""
 
-from typing import Any, Self
+from typing import Any
 
 from .player import Player
 
@@ -28,13 +28,3 @@ class Match:
             "score1": self.score1,
             "score2": self.score2,
         }
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Self:
-        """Reconstruit un match depuis un dictionnaire."""
-        return cls(
-            player1=Player.from_dict(data["player1"]),
-            player2=Player.from_dict(data["player2"]),
-            score1=data.get("score1", 0.0),
-            score2=data.get("score2", 0.0),
-        )

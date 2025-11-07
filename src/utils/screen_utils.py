@@ -1,4 +1,4 @@
-"""Utilitaires partagés pour les vues."""
+"""Utilitaires pour l'interface console."""
 
 import os
 

@@ -465,7 +465,7 @@
                     "firstname": "Sophie",
                     "birthday": "1985-05-15"
                 },
-                "score": 0.0
+                "score": 2.5
             },
             {
                 "player": {
@@ -474,7 +474,7 @@
                     "firstname": "Pierre",
                     "birthday": "1992-11-20"
                 },
-                "score": 0.0
+                "score": 4.0
             },
             {
                 "player": {
@@ -483,7 +483,7 @@
                     "firstname": "Julie",
                     "birthday": "1994-04-22"
                 },
-                "score": 0.0
+                "score": 3.0
             },
             {
                 "player": {
@@ -492,7 +492,7 @@
                     "firstname": "Emma",
                     "birthday": "1991-09-25"
                 },
-                "score": 0.0
+                "score": 4.0
             },
             {
                 "player": {
@@ -510,7 +510,7 @@
                     "firstname": "Luc",
                     "birthday": "1995-07-12"
                 },
-                "score": 0.0
+                "score": 1.0
             },
             {
                 "player": {
@@ -519,8 +519,483 @@
                     "firstname": "John",
                     "birthday": "1990-01-01"
                 },
-                "score": 0.0
+                "score": 4.0
             },
+            {
+                "player": {
+                    "id": "GH78901",
+                    "lastname": "Bernard",
+                    "firstname": "Marie",
+                    "birthday": "1988-03-08"
+                },
+                "score": 2.0
+            },
+            {
+                "player": {
+                    "id": "OP90123",
+                    "lastname": "Durand",
+                    "firstname": "Camille",
+                    "birthday": "1993-12-03"
+                },
+                "score": 2.5
+            },
+            {
+                "player": {
+                    "id": "MN45678",
+                    "lastname": "Richard",
+                    "firstname": "Thomas",
+                    "birthday": "1987-02-14"
+                },
+                "score": 2.0
+            }
+        ],
+        "rounds": [
+            {
+                "name": "Round 1",
+                "matches": [
+                    {
+                        "player1": {
+                            "id": "CD67890",
+                            "lastname": "Martin",
+                            "firstname": "Sophie",
+                            "birthday": "1985-05-15"
+                        },
+                        "player2": {
+                            "id": "EF23456",
+                            "lastname": "Dubois",
+                            "firstname": "Pierre",
+                            "birthday": "1992-11-20"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "ST01234",
+                            "lastname": "Simon",
+                            "firstname": "Julie",
+                            "birthday": "1994-04-22"
+                        },
+                        "player2": {
+                            "id": "KL89012",
+                            "lastname": "Robert",
+                            "firstname": "Emma",
+                            "birthday": "1991-09-25"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "QR56789",
+                            "lastname": "Moreau",
+                            "firstname": "Lucas",
+                            "birthday": "1989-06-18"
+                        },
+                        "player2": {
+                            "id": "IJ34567",
+                            "lastname": "Petit",
+                            "firstname": "Luc",
+                            "birthday": "1995-07-12"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "AB12345",
+                            "lastname": "Doe",
+                            "firstname": "John",
+                            "birthday": "1990-01-01"
+                        },
+                        "player2": {
+                            "id": "GH78901",
+                            "lastname": "Bernard",
+                            "firstname": "Marie",
+                            "birthday": "1988-03-08"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "OP90123",
+                            "lastname": "Durand",
+                            "firstname": "Camille",
+                            "birthday": "1993-12-03"
+                        },
+                        "player2": {
+                            "id": "MN45678",
+                            "lastname": "Richard",
+                            "firstname": "Thomas",
+                            "birthday": "1987-02-14"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    }
+                ],
+                "started_at": "2025-11-07 17:11:50",
+                "ended_at": "2025-11-07 17:11:59"
+            },
+            {
+                "name": "Round 2",
+                "matches": [
+                    {
+                        "player1": {
+                            "id": "CD67890",
+                            "lastname": "Martin",
+                            "firstname": "Sophie",
+                            "birthday": "1985-05-15"
+                        },
+                        "player2": {
+                            "id": "KL89012",
+                            "lastname": "Robert",
+                            "firstname": "Emma",
+                            "birthday": "1991-09-25"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "IJ34567",
+                            "lastname": "Petit",
+                            "firstname": "Luc",
+                            "birthday": "1995-07-12"
+                        },
+                        "player2": {
+                            "id": "AB12345",
+                            "lastname": "Doe",
+                            "firstname": "John",
+                            "birthday": "1990-01-01"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "OP90123",
+                            "lastname": "Durand",
+                            "firstname": "Camille",
+                            "birthday": "1993-12-03"
+                        },
+                        "player2": {
+                            "id": "EF23456",
+                            "lastname": "Dubois",
+                            "firstname": "Pierre",
+                            "birthday": "1992-11-20"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "ST01234",
+                            "lastname": "Simon",
+                            "firstname": "Julie",
+                            "birthday": "1994-04-22"
+                        },
+                        "player2": {
+                            "id": "QR56789",
+                            "lastname": "Moreau",
+                            "firstname": "Lucas",
+                            "birthday": "1989-06-18"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "GH78901",
+                            "lastname": "Bernard",
+                            "firstname": "Marie",
+                            "birthday": "1988-03-08"
+                        },
+                        "player2": {
+                            "id": "MN45678",
+                            "lastname": "Richard",
+                            "firstname": "Thomas",
+                            "birthday": "1987-02-14"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    }
+                ],
+                "started_at": "2025-11-07 17:12:01",
+                "ended_at": "2025-11-07 17:12:11"
+            },
+            {
+                "name": "Round 3",
+                "matches": [
+                    {
+                        "player1": {
+                            "id": "KL89012",
+                            "lastname": "Robert",
+                            "firstname": "Emma",
+                            "birthday": "1991-09-25"
+                        },
+                        "player2": {
+                            "id": "AB12345",
+                            "lastname": "Doe",
+                            "firstname": "John",
+                            "birthday": "1990-01-01"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "CD67890",
+                            "lastname": "Martin",
+                            "firstname": "Sophie",
+                            "birthday": "1985-05-15"
+                        },
+                        "player2": {
+                            "id": "ST01234",
+                            "lastname": "Simon",
+                            "firstname": "Julie",
+                            "birthday": "1994-04-22"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "EF23456",
+                            "lastname": "Dubois",
+                            "firstname": "Pierre",
+                            "birthday": "1992-11-20"
+                        },
+                        "player2": {
+                            "id": "IJ34567",
+                            "lastname": "Petit",
+                            "firstname": "Luc",
+                            "birthday": "1995-07-12"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "GH78901",
+                            "lastname": "Bernard",
+                            "firstname": "Marie",
+                            "birthday": "1988-03-08"
+                        },
+                        "player2": {
+                            "id": "OP90123",
+                            "lastname": "Durand",
+                            "firstname": "Camille",
+                            "birthday": "1993-12-03"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "QR56789",
+                            "lastname": "Moreau",
+                            "firstname": "Lucas",
+                            "birthday": "1989-06-18"
+                        },
+                        "player2": {
+                            "id": "MN45678",
+                            "lastname": "Richard",
+                            "firstname": "Thomas",
+                            "birthday": "1987-02-14"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    }
+                ],
+                "started_at": "2025-11-07 17:12:17",
+                "ended_at": "2025-11-07 17:12:29"
+            },
+            {
+                "name": "Round 4",
+                "matches": [
+                    {
+                        "player1": {
+                            "id": "AB12345",
+                            "lastname": "Doe",
+                            "firstname": "John",
+                            "birthday": "1990-01-01"
+                        },
+                        "player2": {
+                            "id": "EF23456",
+                            "lastname": "Dubois",
+                            "firstname": "Pierre",
+                            "birthday": "1992-11-20"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "ST01234",
+                            "lastname": "Simon",
+                            "firstname": "Julie",
+                            "birthday": "1994-04-22"
+                        },
+                        "player2": {
+                            "id": "GH78901",
+                            "lastname": "Bernard",
+                            "firstname": "Marie",
+                            "birthday": "1988-03-08"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "KL89012",
+                            "lastname": "Robert",
+                            "firstname": "Emma",
+                            "birthday": "1991-09-25"
+                        },
+                        "player2": {
+                            "id": "IJ34567",
+                            "lastname": "Petit",
+                            "firstname": "Luc",
+                            "birthday": "1995-07-12"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "CD67890",
+                            "lastname": "Martin",
+                            "firstname": "Sophie",
+                            "birthday": "1985-05-15"
+                        },
+                        "player2": {
+                            "id": "OP90123",
+                            "lastname": "Durand",
+                            "firstname": "Camille",
+                            "birthday": "1993-12-03"
+                        },
+                        "score1": 0.5,
+                        "score2": 0.5
+                    },
+                    {
+                        "player1": {
+                            "id": "MN45678",
+                            "lastname": "Richard",
+                            "firstname": "Thomas",
+                            "birthday": "1987-02-14"
+                        },
+                        "player2": {
+                            "id": "QR56789",
+                            "lastname": "Moreau",
+                            "firstname": "Lucas",
+                            "birthday": "1989-06-18"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    }
+                ],
+                "started_at": "2025-11-07 17:12:30",
+                "ended_at": "2025-11-07 17:12:40"
+            },
+            {
+                "name": "Round 5",
+                "matches": [
+                    {
+                        "player1": {
+                            "id": "EF23456",
+                            "lastname": "Dubois",
+                            "firstname": "Pierre",
+                            "birthday": "1992-11-20"
+                        },
+                        "player2": {
+                            "id": "ST01234",
+                            "lastname": "Simon",
+                            "firstname": "Julie",
+                            "birthday": "1994-04-22"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "KL89012",
+                            "lastname": "Robert",
+                            "firstname": "Emma",
+                            "birthday": "1991-09-25"
+                        },
+                        "player2": {
+                            "id": "GH78901",
+                            "lastname": "Bernard",
+                            "firstname": "Marie",
+                            "birthday": "1988-03-08"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "AB12345",
+                            "lastname": "Doe",
+                            "firstname": "John",
+                            "birthday": "1990-01-01"
+                        },
+                        "player2": {
+                            "id": "MN45678",
+                            "lastname": "Richard",
+                            "firstname": "Thomas",
+                            "birthday": "1987-02-14"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "CD67890",
+                            "lastname": "Martin",
+                            "firstname": "Sophie",
+                            "birthday": "1985-05-15"
+                        },
+                        "player2": {
+                            "id": "IJ34567",
+                            "lastname": "Petit",
+                            "firstname": "Luc",
+                            "birthday": "1995-07-12"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    },
+                    {
+                        "player1": {
+                            "id": "OP90123",
+                            "lastname": "Durand",
+                            "firstname": "Camille",
+                            "birthday": "1993-12-03"
+                        },
+                        "player2": {
+                            "id": "QR56789",
+                            "lastname": "Moreau",
+                            "firstname": "Lucas",
+                            "birthday": "1989-06-18"
+                        },
+                        "score1": 1.0,
+                        "score2": 0.0
+                    }
+                ],
+                "started_at": "2025-11-07 17:12:41",
+                "ended_at": "2025-11-07 17:12:47"
+            }
+        ],
+        "rounds_count": 5,
+        "current_round": 6,
+        "description": "Ceci est un tournois d'hiver"
+    },
+    {
+        "name": "B2",
+        "location": "Montpellier",
+        "start_date": "2025-11-07",
+        "end_date": "2025-11-07",
+        "players": [
             {
                 "player": {
                     "id": "GH78901",
@@ -532,12 +1007,30 @@
             },
             {
                 "player": {
-                    "id": "OP90123",
-                    "lastname": "Durand",
-                    "firstname": "Camille",
-                    "birthday": "1993-12-03"
+                    "id": "AB12345",
+                    "lastname": "Doe",
+                    "firstname": "John",
+                    "birthday": "1990-01-01"
+                },
+                "score": 1.0
+            },
+            {
+                "player": {
+                    "id": "KL89012",
+                    "lastname": "Robert",
+                    "firstname": "Emma",
+                    "birthday": "1991-09-25"
                 },
                 "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "IJ34567",
+                    "lastname": "Petit",
+                    "firstname": "Luc",
+                    "birthday": "1995-07-12"
+                },
+                "score": 1.0
             },
             {
                 "player": {
@@ -547,11 +1040,76 @@
                     "birthday": "1987-02-14"
                 },
                 "score": 0.0
+            },
+            {
+                "player": {
+                    "id": "CD67890",
+                    "lastname": "Martin",
+                    "firstname": "Sophie",
+                    "birthday": "1985-05-15"
+                },
+                "score": 1.0
             }
         ],
-        "rounds": [],
-        "rounds_count": 5,
-        "current_round": 1,
-        "description": "Ceci est un tournois d'hiver"
+        "rounds": [
+            {
+                "name": "Round 1",
+                "matches": [
+                    {
+                        "player1": {
+                            "id": "GH78901",
+                            "lastname": "Bernard",
+                            "firstname": "Marie",
+                            "birthday": "1988-03-08"
+                        },
+                        "player2": {
+                            "id": "AB12345",
+                            "lastname": "Doe",
+                            "firstname": "John",
+                            "birthday": "1990-01-01"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "KL89012",
+                            "lastname": "Robert",
+                            "firstname": "Emma",
+                            "birthday": "1991-09-25"
+                        },
+                        "player2": {
+                            "id": "IJ34567",
+                            "lastname": "Petit",
+                            "firstname": "Luc",
+                            "birthday": "1995-07-12"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    },
+                    {
+                        "player1": {
+                            "id": "MN45678",
+                            "lastname": "Richard",
+                            "firstname": "Thomas",
+                            "birthday": "1987-02-14"
+                        },
+                        "player2": {
+                            "id": "CD67890",
+                            "lastname": "Martin",
+                            "firstname": "Sophie",
+                            "birthday": "1985-05-15"
+                        },
+                        "score1": 0.0,
+                        "score2": 1.0
+                    }
+                ],
+                "started_at": "2025-11-07 17:17:04",
+                "ended_at": "2025-11-07 17:17:09"
+            }
+        ],
+        "rounds_count": 3,
+        "current_round": 2,
+        "description": ""
     }
 ]
