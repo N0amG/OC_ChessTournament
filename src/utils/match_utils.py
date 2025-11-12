@@ -85,7 +85,7 @@ def pair_players_by_score(
 def get_played_pairs(tournament: Tournament) -> set[tuple[str, str]]:
     """Récupérer toutes les paires de joueurs déjà affrontées."""
     played_pairs: set[tuple[str, str]] = set()
-
+    print("debug  : ", tournament.rounds[0])
     for round_obj in tournament.rounds:
         for match in round_obj.matches:
             pair = tuple(sorted([match.player1.id, match.player2.id]))

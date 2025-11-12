@@ -87,6 +87,7 @@ class TournamentController:
             tournament_data["end_date"] = datetime.now().strftime("%Y-%m-%d")
 
         tournament = Tournament(
+            id=tournament_data["id"],
             name=tournament_data["name"],
             location=tournament_data["location"],
             start_date=tournament_data["start_date"],
@@ -126,33 +127,57 @@ class TournamentController:
         self.view.display_tournaments(tournaments)
 
     def delete_tournament(self) -> None:
-        """Supprime un tournoi via son nom."""
-        name = self.view.prompt_tournament_name()
-        tournament = self.manager.find_by_name(name)
+        """Supprime un tournoi via son identifiant."""
+        tournaments = self.manager.find_all()
+        tournament_id = self.view.prompt_select_tournament(tournaments)
+
+        if not tournament_id:
+            LoggerView.error("Aucun tournoi sélectionné.")
+            return
+
+        tournament = self.manager.find_by_id(tournament_id)
 
         if tournament:
-            self.manager.delete(name)
+            self.manager.delete(tournament_id)
             LoggerView.success("Tournoi supprimé avec succès !")
         else:
-            LoggerView.error(f"Aucun tournoi trouvé avec le nom '{name}'.")
+            LoggerView.error(
+                f"Aucun tournoi trouvé avec l'ID '{tournament_id}'."
+            )
 
     def show_tournament_details(self) -> None:
         """Affiche les détails d'un tournoi."""
-        name = self.view.prompt_tournament_name()
-        tournament = self.manager.find_by_name(name)
+        tournaments = self.manager.find_all()
+        tournament_id = self.view.prompt_select_tournament(tournaments)
+
+        if not tournament_id:
+            LoggerView.error("Aucun tournoi sélectionné.")
+            return
+
+        tournament = self.manager.find_by_id(tournament_id)
 
         if tournament:
             self.view.display_tournament_details(tournament)
         else:
-            LoggerView.error(f"Aucun tournoi trouvé avec le nom '{name}'.")
+            LoggerView.error(
+                f"Aucun tournoi trouvé avec l'ID '{tournament_id}'."
+            )
 
     def play_tournament(self) -> None:
         """Gère le déroulement d'un tournoi."""
-        name = self.view.prompt_tournament_name()
-        tournament = self.manager.find_by_name(name)
+        tournaments = self.manager.find_all()
+        tournament_id = self.view.prompt_select_tournament(tournaments)
+
+        if not tournament_id:
+            LoggerView.error("Aucun tournoi sélectionné.")
+            return
+
+        tournament = self.manager.find_by_id(tournament_id)
 
         if not tournament:
-            LoggerView.error(f"Aucun tournoi trouvé avec le nom '{name}'.")
+            LoggerView.error(
+                f"Aucun tournoi trouvé avec l'ID '{tournament_id}'."
+            )
             return
 
         if tournament.current_round > tournament.rounds_count:
@@ -256,6 +281,13 @@ class TournamentController:
         """
         errors: list[str] = []
 
+        # Valider l'ID
+        id_valid, id_error = TournamentController.validate_tournament_id(
+            tournament.id
+        )
+        if not id_valid:
+            errors.append(id_error)
+
         # Vérifier les champs requis
         if not tournament.name or not tournament.location:
             errors.append("Le nom et le lieu du tournoi sont obligatoires.")
@@ -276,6 +308,21 @@ class TournamentController:
             errors.extend(player_errors)
 
         return len(errors) == 0, errors
+
+    @staticmethod
+    def validate_tournament_id(tournament_id: str) -> tuple[bool, str | None]:
+        """
+        Valide le format de l'ID d'un tournoi (AB12345)
+        :param tournament_id: str - L'ID à valider
+        :return: tuple[bool, str | None] - (True, None) si valide, sinon
+            (False, message d'erreur)
+        """
+        if not re.match(r"^[A-Z]{2}\d{5}$", tournament_id):
+            return (
+                False,
+                "Format d'identifiant invalide. Exemple : AB12345.",
+            )
+        return True, None
 
     @staticmethod
     def validate_dates(

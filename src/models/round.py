@@ -32,7 +32,7 @@ class Round:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
         """Reconstruit un tour depuis un dictionnaire."""
-        matches = [Match(**raw) for raw in data.get("matches", [])]
+        matches = [Match.from_dict(match) for match in data.get("matches", [])]
         return cls(
             name=data["name"],
             matches=matches,

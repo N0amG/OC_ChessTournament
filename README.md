@@ -5,11 +5,12 @@ Application de gestion de tournois d'échecs utilisant le système suisse.
 ## 📋 Description
 
 Cette application permet de :
-- Gérer les joueurs (création, liste, suppression)
-- Créer et gérer des tournois d'échecs
+- Gérer les joueurs avec identifiants uniques (création, liste, suppression)
+- Créer et gérer des tournois d'échecs avec IDs uniques
 - Organiser les rounds selon le système suisse
 - Gérer automatiquement les « bye » (victoire par forfait) pour les nombres impairs de joueurs
-- Sauvegarder toutes les données en JSON
+- Sauvegarder toutes les données en JSON avec stockage optimisé (référencement par ID)
+- Sélectionner les tournois par ID plutôt que par nom
 
 ## 🏗️ Architecture
 
@@ -143,6 +144,26 @@ OC_ChessTournament/
 3. **Rematches évités** : MatchController garde les paires déjà jouées.
 4. **Gestion des « bye »** : un joueur est automatiquement qualifié si le nombre de participants est impair et reçoit 1 point.
 
+## 🆕 Fonctionnalités récentes
+
+### Identifiants uniques pour les tournois
+- Chaque tournoi possède un **ID unique** au format `AB12345` (2 lettres + 5 chiffres)
+- Les tournois sont maintenant sélectionnés par **ID** plutôt que par nom
+- L'ID est le **premier attribut** dans les données JSON
+- Validation stricte du format d'ID lors de la création
+
+### Stockage optimisé des joueurs
+- Les joueurs ne sont plus dupliqués dans chaque tournoi et match
+- Seul l'**ID du joueur** est stocké (`player_id`, `player1_id`, `player2_id`)
+- Les objets `Player` sont récupérés automatiquement depuis `players.json` lors du chargement
+- **Réduction de ~60%** de la taille des fichiers de tournois
+- Cohérence garantie : modifier un joueur met à jour tous les tournois
+
+### Interface améliorée
+- Sélection des tournois via un tableau numéroté (pas besoin de saisir l'ID)
+- Affichage de l'ID dans toutes les listes et détails de tournois
+- Messages d'erreur plus clairs lors de la validation
+
 ## 🚀 Installation et utilisation
 
 ### Prérequis
@@ -181,7 +202,6 @@ Sortir de l'application : saisir `0` dans le menu principal.
 python -m flake8 src
 
 # Rapport HTML
-## � Système Suisse
 python -m flake8 src --format=html --htmldir=flake8-report
 start .\flake8-report\index.html
 ```
@@ -195,12 +215,26 @@ deactivate
 
 ## 🔧 Validation des données
 
-- **ID joueur** : regex `^[A-Z]{2}\d{5}$`
+- **ID joueur** : regex `^[A-Z]{2}\d{5}$` (ex: AB12345)
+- **ID tournoi** : regex `^[A-Z]{2}\d{5}$` (ex: AA10000) - même format que les joueurs
 - **Nom / prénom** : première lettre majuscule, lettres/espaces/traits d'union, accents autorisés
 - **Date de naissance** : format `YYYY-MM-DD`
 - **Dates tournoi** : `end_date` ≥ `start_date`
 
-## 📊 Exemple de données JSON
+## � Optimisation du stockage
+
+Pour réduire la taille des fichiers et éviter la duplication des données :
+- Les **joueurs** sont stockés une seule fois dans `players.json`
+- Les **tournois** référencent les joueurs par leur **ID uniquement**
+- Les **matchs** utilisent également les IDs (`player1_id`, `player2_id`)
+
+**Avantages** :
+- ✅ Réduction de ~60% de la taille des fichiers de tournois
+- ✅ Une seule source de vérité pour les informations des joueurs
+- ✅ Modifications d'un joueur automatiquement reflétées partout
+- ✅ Architecture normalisée (comme une base de données relationnelle)
+
+## Exemples de données JSON
 
 ### players.json
 
@@ -220,6 +254,7 @@ deactivate
 ```json
 [
   {
+    "id": "AA10000",
     "name": "Tournoi A1",
     "location": "Paris",
     "start_date": "2025-11-01",
@@ -229,19 +264,30 @@ deactivate
     "current_round": 1,
     "players": [
       {
-        "player": {
-          "id": "AB12345",
-          "lastname": "Doe",
-          "firstname": "John",
-          "birthday": "1990-01-01"
-        },
-        "score": 0.0
+        "player_id": "AB12345",
+        "score": 2.5
       }
     ],
-    "rounds": []
+    "rounds": [
+      {
+        "name": "Round 1",
+        "matches": [
+          {
+            "player1_id": "AB12345",
+            "player2_id": "CD67890",
+            "score1": 1.0,
+            "score2": 0.0
+          }
+        ],
+        "started_at": "2025-11-01 14:00:00",
+        "ended_at": "2025-11-01 14:30:00"
+      }
+    ]
   }
 ]
 ```
+
+> **Note** : Les objets `Player` sont automatiquement récupérés via `PlayerManager.find_by_id()` lors du chargement des tournois.
 
 ## 🤝 Contribution
 

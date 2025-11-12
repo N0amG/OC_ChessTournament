@@ -1,8 +1,6 @@
 """Modèle représentant un tournoi d'échecs."""
 
 from typing import Any, Self
-
-from .player import Player
 from .round import Round
 
 
@@ -11,6 +9,7 @@ class Tournament:
 
     def __init__(
         self,
+        id: str,
         name: str,
         location: str,
         start_date: str,
@@ -21,6 +20,7 @@ class Tournament:
         current_round: int = 1,
         description: str = "",
     ) -> None:
+        self.id = id
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -34,13 +34,14 @@ class Tournament:
     def to_dict(self) -> dict[str, Any]:
         """Convertit le tournoi en dictionnaire JSON."""
         return {
+            "id": self.id,
             "name": self.name,
             "location": self.location,
             "start_date": self.start_date,
             "end_date": self.end_date,
             "players": [
                 {
-                    "player": player.to_dict(),
+                    "player_id": player.id,
                     "score": score,
                 }
                 for player, score in self.players
@@ -54,15 +55,25 @@ class Tournament:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
         """Reconstruit un tournoi depuis un dictionnaire."""
+        from managers import PlayerManager
+
+        player_manager = PlayerManager()
         players: list[list[Any]] = []
+
         for entry in data.get("players", []):
-            player = Player(**entry["player"])
+
+            player = player_manager.find_by_id(entry["player_id"])
+            if not player:
+                raise ValueError(
+                    f"Joueur {entry['player_id']} introuvable"
+                )
             score = float(entry.get("score", 0.0))
             players.append([player, score])
 
         rounds = [Round.from_dict(raw) for raw in data.get("rounds", [])]
 
         return cls(
+            id=data["id"],
             name=data["name"],
             location=data["location"],
             start_date=data["start_date"],

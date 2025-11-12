@@ -49,6 +49,7 @@ class TournamentView:
         """Demande les informations d'un nouveau tournoi"""
         console.print("\n[bold green]➕ Nouveau tournoi[/bold green]")
 
+        tournament_id = Prompt.ask("[cyan]ID du tournoi[/cyan]").strip()
         name = Prompt.ask("[cyan]Nom du tournoi[/cyan]").strip()
         location = Prompt.ask("[cyan]Lieu[/cyan]").strip()
         start_date = Prompt.ask(
@@ -67,6 +68,7 @@ class TournamentView:
         ).strip()
 
         return {
+            "id": tournament_id,
             "name": name,
             "location": location,
             "start_date": start_date,
@@ -91,6 +93,7 @@ class TournamentView:
             title_style="bold green",
         )
 
+        table.add_column("ID", style="cyan", no_wrap=True)
         table.add_column("Nom", style="white bold", no_wrap=True)
         table.add_column("Lieu", style="cyan")
         table.add_column("Date de début", style="dim")
@@ -107,6 +110,7 @@ class TournamentView:
                 )
 
             table.add_row(
+                tournament.id,
                 tournament.name,
                 tournament.location,
                 tournament.start_date,
@@ -186,6 +190,7 @@ class TournamentView:
         )
 
         info_branch = tree.add("[bold cyan]📋 Informations[/bold cyan]")
+        info_branch.add("[white]ID:[/white] {}".format(tournament.id))
         info_branch.add("[white]Lieu:[/white] {}".format(tournament.location))
         info_branch.add(
             "[white]Date:[/white] {} au {}".format(
@@ -245,10 +250,56 @@ class TournamentView:
         console.print(tree)
 
     @staticmethod
-    def prompt_tournament_name() -> str:
-        """Demande le nom d'un tournoi"""
+    def prompt_select_tournament(tournaments: list[Tournament]) -> str | None:
+        """Sélection d'un tournoi avec tableau Rich"""
         console.print()
-        return Prompt.ask("[cyan]Nom du tournoi[/cyan]").strip()
+
+        if not tournaments:
+            console.print("[yellow]ℹ Aucun tournoi disponible.[/yellow]")
+            return None
+
+        console.print("[bold cyan]🏆 Sélection d'un tournoi[/bold cyan]\n")
+
+        table = Table(
+            show_header=True, header_style="bold cyan", border_style="cyan"
+        )
+
+        table.add_column("N°", style="yellow", justify="center")
+        table.add_column("ID", style="cyan")
+        table.add_column("Nom", style="white")
+        table.add_column("Lieu", style="white")
+        table.add_column("Statut", style="yellow")
+
+        for i, tournament in enumerate(tournaments, 1):
+            if tournament.current_round > tournament.rounds_count:
+                status = "Terminé"
+            else:
+                current = tournament.current_round
+                total = tournament.rounds_count
+                status = f"Round {current}/{total}"
+            table.add_row(
+                str(i),
+                tournament.id,
+                tournament.name,
+                tournament.location,
+                status
+            )
+
+        console.print(table)
+        console.print()
+
+        selection = Prompt.ask(
+            "[cyan]Entrez le numéro du tournoi[/cyan]"
+        ).strip()
+
+        try:
+            idx = int(selection) - 1
+            if 0 <= idx < len(tournaments):
+                return tournaments[idx].id
+        except ValueError:
+            pass
+
+        return None
 
     @staticmethod
     def prompt_select_players(available_players: list[Player]) -> list[str]:
