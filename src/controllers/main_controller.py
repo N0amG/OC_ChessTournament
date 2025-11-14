@@ -5,7 +5,7 @@ from views.logger_view import LoggerView
 
 
 class MainController:
-    """Point d'entrée principal orchestrant l'application."""
+    """Point d'entrée principal l'application."""
 
     def __init__(self) -> None:
         self.player_controller = PlayerController()

@@ -1,6 +1,7 @@
 """Modèle représentant un tournoi d'échecs."""
 
 from typing import Any, Self
+
 from .round import Round
 
 
@@ -56,17 +57,21 @@ class Tournament:
     def from_dict(cls, data: dict[str, Any]) -> Self:
         """Reconstruit un tournoi depuis un dictionnaire."""
         from managers import PlayerManager
+        from views.logger_view import LoggerView
 
         player_manager = PlayerManager()
         players: list[list[Any]] = []
 
         for entry in data.get("players", []):
-
             player = player_manager.find_by_id(entry["player_id"])
             if not player:
-                raise ValueError(
-                    f"Joueur {entry['player_id']} introuvable"
+                # Joueur introuvable : on l'ignore avec un avertissement
+                tournament_name = data.get('name', data['id'])
+                LoggerView.warning(
+                    f"Joueur {entry['player_id']} introuvable "
+                    f"dans le tournoi '{tournament_name}' (ignoré)"
                 )
+                continue
             score = float(entry.get("score", 0.0))
             players.append([player, score])
 

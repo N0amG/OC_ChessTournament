@@ -48,12 +48,6 @@
         "birthday": "1989-06-18"
     },
     {
-        "id": "ST01234",
-        "lastname": "Simon",
-        "firstname": "Julie",
-        "birthday": "1994-04-22"
-    },
-    {
         "id": "UV67890",
         "lastname": "Laurent",
         "firstname": "Nicolas",
@@ -82,5 +76,11 @@
         "lastname": "Esquie",
         "firstname": "Pierre",
         "birthday": "2000-11-20"
+    },
+    {
+        "id": "ST01234",
+        "lastname": "Simon",
+        "firstname": "Julie",
+        "birthday": "1994-04-22"
     }
 ]

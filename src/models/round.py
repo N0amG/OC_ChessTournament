@@ -32,7 +32,14 @@ class Round:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
         """Reconstruit un tour depuis un dictionnaire."""
-        matches = [Match.from_dict(match) for match in data.get("matches", [])]
+        matches = [
+            match
+            for match in (
+                Match.from_dict(match_data)
+                for match_data in data.get("matches", [])
+            )
+            if match is not None
+        ]
         return cls(
             name=data["name"],
             matches=matches,

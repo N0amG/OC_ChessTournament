@@ -30,9 +30,10 @@ class Match:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Match":
+    def from_dict(cls, data: dict[str, Any]) -> "Match | None":
         """Reconstruit un match depuis un dictionnaire."""
         from managers import PlayerManager
+        from views.logger_view import LoggerView
 
         player_manager = PlayerManager()
 
@@ -46,7 +47,17 @@ class Match:
             player2 = player_manager.find_by_id(data["player2_id"])
 
             if not player1 or not player2:
-                raise ValueError("Joueur introuvable dans la base de données")
+                missing = []
+                if not player1:
+                    missing.append(data["player1_id"])
+                if not player2:
+                    missing.append(data["player2_id"])
+
+                LoggerView.warning(
+                    f"Joueur(s) {', '.join(missing)} introuvable(s) "
+                    "dans un match (match ignoré)"
+                )
+                return None
 
         return cls(
             player1=player1,
