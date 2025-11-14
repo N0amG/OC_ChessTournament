@@ -36,28 +36,21 @@ class Match:
         from views.logger_view import LoggerView
 
         player_manager = PlayerManager()
+        player1 = player_manager.find_by_id(data["player1_id"])
+        player2 = player_manager.find_by_id(data["player2_id"])
 
-        # Support ancien format (avec objets player complets)
-        if "player1" in data:
-            player1 = Player(**data["player1"])
-            player2 = Player(**data["player2"])
-        # Nouveau format (avec IDs uniquement)
-        else:
-            player1 = player_manager.find_by_id(data["player1_id"])
-            player2 = player_manager.find_by_id(data["player2_id"])
+        if not player1 or not player2:
+            missing = []
+            if not player1:
+                missing.append(data["player1_id"])
+            if not player2:
+                missing.append(data["player2_id"])
 
-            if not player1 or not player2:
-                missing = []
-                if not player1:
-                    missing.append(data["player1_id"])
-                if not player2:
-                    missing.append(data["player2_id"])
-
-                LoggerView.warning(
-                    f"Joueur(s) {', '.join(missing)} introuvable(s) "
-                    "dans un match (match ignoré)"
-                )
-                return None
+            LoggerView.warning(
+                f"Joueur(s) {', '.join(missing)} introuvable(s) "
+                "dans un match (match ignoré)"
+            )
+            return None
 
         return cls(
             player1=player1,
