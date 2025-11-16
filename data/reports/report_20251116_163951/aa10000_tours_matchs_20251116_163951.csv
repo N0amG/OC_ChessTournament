@@ -1,0 +1,7 @@
+tournament_id;round_name;started_at;ended_at;match_number;player1_id;player1_name;score1;player2_id;player2_name;score2
+AA10000;Round 1;2025-10-31 11:51:00;2025-10-31 11:51:03;1;CD67890;Sophie Martin;1.0;GH78901;Marie Bernard;0.0
+AA10000;Round 1;2025-10-31 11:51:00;2025-10-31 11:51:03;2;EF23456;Pierre Esquie;0.5;AB12345;John Doe;0.5
+AA10000;Round 2;2025-10-31 11:51:05;2025-10-31 11:51:08;1;CD67890;Sophie Martin;0.0;EF23456;Pierre Esquie;1.0
+AA10000;Round 2;2025-10-31 11:51:05;2025-10-31 11:51:08;2;AB12345;John Doe;0.5;GH78901;Marie Bernard;0.5
+AA10000;Round 3;2025-11-14 15:34:48;2025-11-14 15:34:50;1;EF23456;Pierre Esquie;1.0;GH78901;Marie Bernard;0.0
+AA10000;Round 3;2025-11-14 15:34:48;2025-11-14 15:34:50;2;CD67890;Sophie Martin;0.0;AB12345;John Doe;1.0

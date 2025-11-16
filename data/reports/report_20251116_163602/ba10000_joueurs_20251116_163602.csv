@@ -1,0 +1,11 @@
+tournament_id;player_id;lastname;firstname;score
+BA10000;GH78901;Bernard;Marie;2.0
+BA10000;AB12345;Doe;John;4.0
+BA10000;OP90123;Durand;Camille;2.5
+BA10000;EF23456;Esquie;Pierre;4.0
+BA10000;CD67890;Martin;Sophie;2.5
+BA10000;QR56789;Moreau;Lucas;0.0
+BA10000;IJ34567;Petit;Luc;1.0
+BA10000;MN45678;Richard;Thomas;2.0
+BA10000;KL89012;Robert;Emma;4.0
+BA10000;ST01234;Simon;Julie;3.0

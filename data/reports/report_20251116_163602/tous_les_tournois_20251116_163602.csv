@@ -1,0 +1,6 @@
+tournament_id;name;location;start_date;end_date;rounds_count;current_round;players_count;description
+AA10000;A1;Lyon;2025-10-31;2025-10-31;3;4;4;Un tournois d'échecs a lyon
+AA10001;A2;Paris;2025-11-01;2025-11-02;4;5;6;Tournoi national à Paris
+BA10000;B1;Nice;2025-12-01;2026-01-02;5;6;10;Ceci est un tournois d'hiver
+CA10000;C1;Malte;2025-11-11;2025-12-30;3;4;4;
+AZ45687;D1;Thailande;2025-11-12;2025-11-12;3;2;4;
